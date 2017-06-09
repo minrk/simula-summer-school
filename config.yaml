@@ -1,0 +1,32 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  host: simula-summer-school.minrk.net
+  https:
+    enabled: true
+    type: "kube-lego"
+
+auth:
+  type: github
+  github:
+    callbackUrl: "https://simula-summer-school.minrk.net/hub/oauth_callback"
+
+hub:
+  image:
+    name: jupyterhub/k8s-hub
+    tag: v688c7d0
+  service:
+    type: ClusterIP
+proxy:
+  service:
+    type: ClusterIP
+
+singleuser:
+  image:
+    name: minrk/simula-summer-school
+    tag: test
+
+admin:
+  users:
+    - minrk
