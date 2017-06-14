@@ -12,4 +12,4 @@ upgrade:
 	helm upgrade hub ./helm-chart/jupyterhub -f config.yaml -f secrets.yaml
 
 conda:
-	docker run --rm -it $(BASE_IMAGE) -v conda-bld:/opt/conda/conda-bld
+	docker build -t conda-pkgs conda-recipes

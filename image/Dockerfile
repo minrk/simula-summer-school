@@ -18,13 +18,12 @@ ADD requirements.txt .
 RUN pip install --no-cache -r requirements.txt && \
     rm requirements.txt
 
-RUN conda install -c minrk neuron lfpy && \
-    conda clean -tipsy
-# ENV PATH=/opt/neuron/x86_64/bin:$PATH
-# remove python2 kernel
 USER root
 RUN echo y | jupyter kernelspec remove python2
 USER jovyan
+
+RUN conda install -yq -c minrk neuron lfpy && \
+    conda clean -tipsy
 
 WORKDIR /home/$NB_USER
 # ENTRYPOINT []

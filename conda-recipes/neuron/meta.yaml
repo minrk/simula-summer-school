@@ -1,5 +1,5 @@
 {% set version = "7.4" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: neuron
@@ -23,5 +23,7 @@ requirements:
     - autoconf
 
 test:
+  files:
+    - Nap_Et2.mod
   imports:
     - neuron

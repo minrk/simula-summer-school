@@ -1,10 +1,14 @@
-./configure --without-x --with-nrnpython=$PYTHON --prefix=$PREFIX
+./configure \
+    --without-x \
+    --with-nrnpython=$PYTHON \
+    --prefix=$PREFIX \
+    --exec-prefix=$PREFIX
+
 make -j ${NUM_CPUS:-1} && make install
+
+# redo Python binding installation
+# since package installs in lib/python instead of proper site-packages
+rm -rf $PREFIX/lib/python
 cd src/nrnpython
 python setup.py install
 
-# fix installation paths:
-rm -rf $PREFIX/lib/python
-mv $PREFIX/x86_64/bin/* $PREFIX/bin/
-mv $PREFIX/x86_64/lib/* $PREFIX/lib/
-rm -rf $PREFIX/x86_64

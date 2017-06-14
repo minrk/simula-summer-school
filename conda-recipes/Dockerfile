@@ -1,5 +1,4 @@
 FROM jupyter/scipy-notebook:bb222f49222e
-RUN conda install -yq conda-build
 
 USER root
 RUN apt-get update && \
@@ -7,6 +6,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 USER jovyan
+RUN conda install -yq conda-build anaconda-client
 
 ADD neuron neuron
 RUN conda build neuron
