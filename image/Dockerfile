@@ -32,7 +32,6 @@ RUN jupyter serverextension enable --sys-prefix pull_server_ext
 ADD pull-button.js /tmp/
 RUN jupyter nbextension install --sys-prefix /tmp/pull-button.js && \
     jupyter nbextension enable --sys-prefix --section=tree pull-button
-ADD pull-repos /srv/pull-repos
 
 WORKDIR /home/$NB_USER
 # ENTRYPOINT []

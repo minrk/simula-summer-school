@@ -4,6 +4,7 @@ A severely stripped-down version of data-8/nbpuller
 import os
 
 import git
+import requests
 from tornado.log import app_log
 
 from nbpuller.pull_from_remote import (
@@ -48,17 +49,19 @@ def pull_repo(repo_url):
 
 
 def pull_everything():
-    if not os.path.exists('/srv/pull-repos'):
-        app_log.warning("No repos to pull")
-        return
-    with open('/srv/pull-repos') as f:
-        for line in f:
-            repo_url = line.strip()
-            if repo_url:
-                try:
-                    pull_repo(repo_url)
-                except Exception:
-                    app_log.exception("Failed to pull repo %s", repo_url)
+    r = requests.get('https://raw.githubusercontent.com/minrk/simula-summer-school/master/repos.txt')
+    r.raise_for_status()
+    for line in r.text.splitlines():
+        line = line.strip()
+        if line.startswith('#'):
+            continue
+        if not line:
+            continue
+        repo_url = line
+        try:
+            pull_repo(repo_url)
+        except Exception:
+            app_log.exception("Failed to pull repo %s", repo_url)
 
 
 from concurrent.futures import ThreadPoolExecutor
