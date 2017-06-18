@@ -13,3 +13,6 @@ upgrade:
 
 conda:
 	docker build -t conda-pkgs conda-recipes
+
+run:
+	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook

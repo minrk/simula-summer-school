@@ -18,12 +18,21 @@ ADD requirements.txt .
 RUN pip install --no-cache -r requirements.txt && \
     rm requirements.txt
 
-USER root
-RUN echo y | jupyter kernelspec remove python2
-USER jovyan
-
 RUN conda install -yq -c minrk neuron lfpy && \
     conda clean -tipsy
+
+USER root
+RUN echo y | jupyter kernelspec remove python2 && \
+    rm -rf ~/.local ~/.jupyter
+USER jovyan
+
+RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
+ADD pull_server_ext.py /opt/conda/lib/python3.5/site-packages/pull_server_ext.py
+RUN jupyter serverextension enable --sys-prefix pull_server_ext
+ADD pull-button.js /tmp/
+RUN jupyter nbextension install --sys-prefix /tmp/pull-button.js && \
+    jupyter nbextension enable --sys-prefix --section=tree pull-button
+ADD pull-repos /srv/pull-repos
 
 WORKDIR /home/$NB_USER
 # ENTRYPOINT []
