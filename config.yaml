@@ -29,6 +29,9 @@ singleuser:
   image:
     name: minrk/simula-summer-school
     tag: test
+  memory:
+    limit: 2Gi
+    guarantee: 256Mi
 
 admin:
   users:
