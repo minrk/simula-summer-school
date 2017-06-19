@@ -32,3 +32,9 @@ build image:
     eval $(docker-machine env builder)
     docker build -t minrk/simula-summer-school:test image
     docker push minrk/simula-summer-school:test
+
+cleanup completed jobs:
+
+    kubectl delete job $(kubectl get jobs --all-namespaces | sed '1d' | awk '{print $2}')
+    kubectl delete pod $(kubectl get pod -a | grep Completed | awk '{print $1}')
+
