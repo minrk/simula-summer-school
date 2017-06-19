@@ -21,9 +21,11 @@ RUN pip install --no-cache -r requirements.txt && \
 RUN conda install -yq -c minrk neuron lfpy && \
     conda clean -tipsy
 
+RUN pip install --no-cache nbdime
 USER root
 RUN echo y | jupyter kernelspec remove python2 && \
-    rm -rf ~/.local ~/.jupyter
+    rm -rf ~/.local ~/.jupyter && \
+    nbdime config-git --enable --system
 USER jovyan
 
 RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
