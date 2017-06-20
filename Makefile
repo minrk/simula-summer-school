@@ -1,5 +1,5 @@
 BASE_IMAGE=jupyter/scipy-notebook:bb222f49222e
-IMAGE=minrk/simula-summer-school:test
+IMAGE=minrk/simula-summer-school:2017
 
 .PHONY: image push
 
