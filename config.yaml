@@ -30,8 +30,8 @@ singleuser:
     name: minrk/simula-summer-school
     tag: 2017
   memory:
-    limit: 2Gi
-    guarantee: 256Mi
+    limit: 2G
+    guarantee: 256M
 
 admin:
   users:
