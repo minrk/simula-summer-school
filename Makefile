@@ -16,3 +16,9 @@ conda:
 
 run:
 	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook
+
+pull:
+	- kubectl delete jobs pull-manual 2>/dev/null
+	kubectl create -f ./puller.yaml
+	- watch kubectl get pods -a --selector=job-name=pull-manual
+	kubectl delete jobs pull-manual

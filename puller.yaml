@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pull-manual
+spec:
+  template:
+    spec:
+      containers:
+      - name: puller
+        image: yuvipanda/image-allnodes-puller:v0.8
+        args: ["minrk/simula-summer-school", "2017"]
+      restartPolicy: Never
