@@ -29,6 +29,11 @@ RUN echo y | jupyter kernelspec remove python2 && \
 USER jovyan
 
 RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
+
+RUN conda install -yq dolfin-adjoint && \
+    conda clean -tipsy
+RUN pip install https://github.com/minrk/cbcbeat/archive/py3.tar.gz
+
 ADD pull_server_ext.py /opt/conda/lib/python3.5/site-packages/pull_server_ext.py
 RUN jupyter serverextension enable --sys-prefix pull_server_ext
 ADD pull-button.js /tmp/
