@@ -18,8 +18,10 @@ ADD requirements.txt .
 RUN pip install --no-cache -r requirements.txt && \
     rm requirements.txt
 
-RUN conda install -yq -c minrk neuron lfpy && \
-    conda clean -tipsy
+RUN conda install -yq mpi4py && \
+    conda install -yq -c minrk neuron && \
+    conda clean -tipsy && \
+    pip install --no-cache git+https://github.com/LFPy/LFPy.git
 
 RUN pip install --no-cache nbdime
 USER root

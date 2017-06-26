@@ -22,3 +22,6 @@ pull:
 	kubectl create -f ./puller.yaml
 	- watch kubectl get pods -a --selector=job-name=pull-manual
 	kubectl delete jobs pull-manual
+
+clean-jobs:
+	kubectl delete jobs $(shell kubectl get jobs -a | sed '1d' | awk '{print $$1}')
