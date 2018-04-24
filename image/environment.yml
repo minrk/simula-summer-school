@@ -1,8 +1,9 @@
 channels:
   - conda-forge
   - defaults
+  - minrk
 dependencies:
-  - fenics==2017.1.0
-  - matplotlib=2.0
-  - ipython=6.0
-  - scikit-learn=0.18
+  - fenics=2017.2.0
+  - neuron=7.4
+  - lfpy=2.0
+  - nbdime
