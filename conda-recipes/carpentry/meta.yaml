@@ -1,0 +1,28 @@
+{% set version = "0.1" %}
+
+package:
+  name: carpentry
+  version: {{ version }}
+
+source:
+  url: https://carp.medunigraz.at/carpentry/cme.free.tar.gz
+  sha256: 800c77660698e27c044a637d0d7e879051b3fe0b1b6cc7abaef2dd4c134ba37d
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - libgcc
+    - petsc 3.7.* carp*
+    - mpich 3.2.*
+  run:
+    - zlib
+    - libgcc
+    - libstdcxx-ng
+    - petsc 3.7.* carp*
+    - mpich 3.2.*
+
+test:
+  commands:
+    - conda inspect linkages carpentry

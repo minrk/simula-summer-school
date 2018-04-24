@@ -1,0 +1,32 @@
+{% set name = 'python-csa' %}
+{% set version = "0.1.8" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/c/csa/csa-{{ version }}.tar.gz
+  sha256: 7d372bc89e54114ab5d842a483639d834a15a561a9350a6a4d073d29eb1e2bbc
+
+build:
+  number: {{ build }}
+  script: "pip install -v --no-deps ."
+
+requirements:
+  build:
+    - toolchain
+    - python
+    - pip
+    - numpy
+    - matplotlib
+  run:
+    - python
+    - numpy
+    - matplotlib
+
+test:
+  imports:
+    - csa
