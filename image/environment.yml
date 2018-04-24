@@ -7,3 +7,4 @@ dependencies:
   - neuron=7.4
   - lfpy=2.0
   - nbdime
+  - readline=7

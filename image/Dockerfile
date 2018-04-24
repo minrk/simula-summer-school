@@ -15,12 +15,12 @@ RUN conda env update -n root environment.yml && \
     rm environment.yml && \
     conda clean -tipsy
 
+RUN conda create -y -n carp carpentry
+ENV CARP_LICENSE=${CONDA_DIR}/envs/carp/etc/carp/license.bin
+
 ADD requirements.txt .
 RUN pip install --no-cache -r requirements.txt && \
     rm requirements.txt
-
-RUN conda install -y readline=7 && \
-    conda clean -tipsy
 
 USER root
 RUN nbdime config-git --enable --system
