@@ -1,10 +1,6 @@
-FROM jupyter/scipy-notebook:bb222f49222e
+ARG BASE_TAG=9f9e5ca8fe5a
+FROM jupyter/scipy-notebook:${BASE_TAG}
 
-USER root
-RUN apt-get update && \
-    apt-get install -yq libtinfo-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 USER jovyan
 RUN conda install -yq conda-build anaconda-client
 

@@ -1,4 +1,5 @@
-FROM jupyter/scipy-notebook:bb222f49222e
+ARG BASE_TAG=9f9e5ca8fe5a
+FROM jupyter/scipy-notebook:${BASE_TAG}
 
 USER root
 # libtinfo-dev appears to be needed for neuron
@@ -18,30 +19,19 @@ ADD requirements.txt .
 RUN pip install --no-cache -r requirements.txt && \
     rm requirements.txt
 
-RUN conda install -yq mpi4py && \
-    conda install -yq -c minrk neuron && \
-    conda clean -tipsy && \
-    pip install --no-cache git+https://github.com/LFPy/LFPy.git
+RUN conda install -y readline=7 && \
+    conda clean -tipsy
 
-RUN pip install --no-cache nbdime
 USER root
-RUN echo y | jupyter kernelspec remove python2 && \
-    rm -rf ~/.local ~/.jupyter && \
-    nbdime config-git --enable --system
+RUN nbdime config-git --enable --system
 USER jovyan
 
 RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
 
-RUN conda install -yq dolfin-adjoint && \
-    conda clean -tipsy
-RUN pip install https://github.com/minrk/cbcbeat/archive/py3.tar.gz
-
-ADD pull_server_ext.py /opt/conda/lib/python3.5/site-packages/pull_server_ext.py
+ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
 RUN jupyter serverextension enable --sys-prefix pull_server_ext
 ADD pull-button.js /tmp/
 RUN jupyter nbextension install --sys-prefix /tmp/pull-button.js && \
     jupyter nbextension enable --sys-prefix --section=tree pull-button
 
 WORKDIR /home/$NB_USER
-# ENTRYPOINT []
-CMD start-singleuser.sh
