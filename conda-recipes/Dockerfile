@@ -6,5 +6,7 @@ RUN conda install -yq conda-build anaconda-client
 
 ADD neuron neuron
 RUN conda build neuron
+ADD csa csa
+RUN conda build csa
 ADD lfpy lfpy
 RUN conda build lfpy
