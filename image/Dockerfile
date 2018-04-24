@@ -26,6 +26,8 @@ USER root
 RUN nbdime config-git --enable --system
 USER jovyan
 
+RUN git config --global user.email "jovyan@simula-summer-school.local" && \
+    git config --global user.name "Your Name"
 RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
 
 ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
