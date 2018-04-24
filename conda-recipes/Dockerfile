@@ -10,8 +10,8 @@ RUN conda build carpentry
 USER root
 RUN apt-get -y update && apt-get -y install libtinfo-dev
 USER jovyan
-# ADD neuron neuron
-# RUN conda build neuron
+ADD neuron neuron
+RUN conda build neuron
 # ADD csa csa
 # RUN conda build csa
 # ADD lfpy lfpy
