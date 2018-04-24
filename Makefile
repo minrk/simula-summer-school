@@ -6,9 +6,14 @@ HUB_VERSION=
 .PHONY: image push
 
 image:
-	docker build -t $(IMAGE) image
+	docker build -t $(IMAGE) --build-arg BASE_TAG=$(BASE_TAG) image
 push:
 	docker push $(IMAGE)
+
+install:
+	helm repo add jupyterhub
+	helm repo update
+	helm install hub jupyterhub --version=$(HUB_VERSION) -f config.yaml -f secrets.yaml
 
 upgrade:
 	helm install --upgrade hub jupyterhub --version=$(HUB_VERSION) -f config.yaml -f secrets.yaml
