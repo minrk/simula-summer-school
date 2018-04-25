@@ -1,33 +1,54 @@
-ARG BASE_TAG=9f9e5ca8fe5a
-FROM jupyter/scipy-notebook:${BASE_TAG}
+FROM ubuntu:18.04
 
 USER root
-# libtinfo-dev appears to be needed for neuron
-RUN apt-get update && \
-    apt-get install -yq libtinfo-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN chown jovyan /opt
-USER jovyan
+ENV DEBIAN_FRONTEND noninteractive
+COPY apt.txt /tmp/apt.txt
+RUN apt-get update && apt-get -yq dist-upgrade \
+ && apt-get install -yq --no-install-recommends \
+    $(cat /tmp/apt.txt | sort) \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-ADD environment.yml .
-RUN conda env update -n root environment.yml && \
-    rm environment.yml && \
-    conda clean -tipsy
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+ && locale-gen
 
-RUN conda create -y -n carp carpentry
+ENV NB_UID=1000 \
+    NB_USER=user \
+    CONDA_DIR=/opt/conda
+
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
+
+# install miniconda
+COPY install-miniconda.bash /tmp/install-miniconda.bash
+RUN bash /tmp/install-miniconda.bash
+ENV PATH=$CONDA_DIR/bin:$PATH
+USER $NB_UID
+
+# setup root env
+COPY environment.yml /tmp/environment.yml
+RUN conda env update -n root -f /tmp/environment.yml \
+ && conda clean -tipsy
+
+# install carp in its own env since it has petsc conflicts
+RUN conda create -y -c minrk -n carp carpentry \
+ && conda clean -tipsy
 ENV CARP_LICENSE=${CONDA_DIR}/envs/carp/etc/carp/license.bin
+# Add CARP at the *end* of the PATH
+ENV PATH=$PATH:${CONDA_DIR}/envs/carp/bin
 
-ADD requirements.txt .
-RUN pip install --no-cache -r requirements.txt && \
-    rm requirements.txt
+# install some extra things with requirements.txt
+ADD requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache -r /tmp/requirements.txt
 
+# enable nbdime globally
 USER root
 RUN nbdime config-git --enable --system
-USER jovyan
+USER $NB_UID
 
+# init git
 RUN git config --global user.email "jovyan@simula-summer-school.local" && \
     git config --global user.name "Your Name"
+# install git-puller
 RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
 
 ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py

@@ -3,8 +3,14 @@ channels:
   - defaults
   - minrk
 dependencies:
+  - python=3.6
   - fenics=2017.2.0
   - neuron=7.4
   - lfpy=2.0
   - nbdime
-  - readline=7
+  - matplotlib
+  - scipy
+  - numpy
+  - pandas
+  - notebook
+  - ipykernel

@@ -1,12 +1,11 @@
-BASE_IMAGE=jupyter/scipy-notebook:9f9e5ca8fe5a
-BASE_TAG=9f9e5ca8fe5a
 IMAGE=minrk/simula-summer-school:2018
 HUB_VERSION=
 
 .PHONY: image push
 
 image:
-	docker build -t $(IMAGE) --build-arg BASE_TAG=$(BASE_TAG) image
+	docker build -t $(IMAGE) image
+
 push:
 	docker push $(IMAGE)
 
@@ -19,7 +18,7 @@ upgrade:
 	helm install --upgrade hub jupyterhub --version=$(HUB_VERSION) -f config.yaml -f secrets.yaml
 
 conda:
-	docker build --build-arg BASE_TAG=$(BASE_TAG) -t conda-pkgs conda-recipes
+	docker build -t conda-pkgs conda-recipes
 
 run:
 	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook
