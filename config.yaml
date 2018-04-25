@@ -20,6 +20,8 @@ jupyterhub:
       callbackUrl: "https://simula-summer-school.minrk.net/hub/oauth_callback"
 
   singleuser:
+    storage:
+      homeMountPath: /home/user
     image:
       name: minrk/simula-summer-school
       tag: 2018
