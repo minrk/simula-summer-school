@@ -1,38 +1,109 @@
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: nginx
-  host: simula-summer-school.minrk.net
-  https:
+jupyterhub:
+  proxy:
+    service:
+      type: ClusterIP
+  ingress:
     enabled: true
-    type: "kube-lego"
+    annotations:
+      ingress.kubernetes.io/proxy-body-size: 64m
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - simula-summer-school.minrk.net
+    tls:
+      - secretName: kubelego-tls-jupyterhub
+        hosts:
+          - simula-summer-school.minrk.net
+  auth:
+    type: github
+    github:
+      callbackUrl: "https://simula-summer-school.minrk.net/hub/oauth_callback"
 
-auth:
-  type: github
-  github:
-    callbackUrl: "https://simula-summer-school.minrk.net/hub/oauth_callback"
+  singleuser:
+    image:
+      name: minrk/simula-summer-school
+      tag: 2018
+      pullPolicy: Always
+    memory:
+      limit: 2G
+      guarantee: 256M
+    cpu:
+      limit: 1
+      guarantee: 0.1
 
-hub:
-  image:
-    name: jupyterhub/k8s-hub
-    tag: v688c7d0
-  service:
-    type: ClusterIP
-proxy:
-  service:
-    type: ClusterIP
-  image:
-    name: jupyterhub/configurable-http-proxy
-    tag: 2.0.3
+  auth:
+    admin:
+      access: true
+      users:
+        - minrk
 
-singleuser:
-  image:
-    name: minrk/simula-summer-school
-    tag: 2017
-  memory:
-    limit: 2G
-    guarantee: 256M
+  prePuller:
+    continuous:
+      enabled: true
 
-admin:
-  users:
-    - minrk
+grafana:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - grafana.simula-summer-school.minrk.net
+    tls:
+      - hosts:
+          - grafana.simula-summer-school.minrk.net
+        secretName: kubelego-tls-grafana
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+
+prometheus:
+  nodeExporter:
+    updateStrategy:
+      type: RollingUpdate
+  alertmanager:
+    enabled: false
+  pushgateway:
+    enabled: false
+  rbac:
+    create: true
+  server:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - prometheus.simula-summer-school.minrk.net
+      tls:
+        - hosts:
+            - prometheus.simula-summer-school.minrk.net
+          secretName: kubelego-tls-prometheus
+
+kube-lego:
+  config:
+    LEGO_EMAIL: benjaminrk@simula.no
+    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
+  rbac:
+    create: true
+
+nginx-ingress:
+  rbac:
+    create: true
+  statsExporter:
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+  controller:
+    replicaCount: 2
+    scope:
+      enabled: true
+    config:
+      # Allow POSTs of upto 64MB, for large notebook support.
+      proxy-body-size: 64m
+    stats:
+      enabled: true
+    service:
+      # Preserve client IPs
+      externalTrafficPolicy: Local

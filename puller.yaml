@@ -8,5 +8,5 @@ spec:
       containers:
       - name: puller
         image: yuvipanda/image-allnodes-puller:v0.8
-        args: ["minrk/simula-summer-school", "2017"]
+        args: ["minrk/simula-summer-school", "2018"]
       restartPolicy: Never

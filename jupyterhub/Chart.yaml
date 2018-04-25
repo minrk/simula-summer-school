@@ -1,0 +1,4 @@
+apiVersion: v1
+description:
+name: jupyterhub-simula
+version: 0.2.0

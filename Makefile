@@ -1,5 +1,5 @@
 IMAGE=minrk/simula-summer-school:2018
-HUB_VERSION=
+HUB_VERSION=v0.7-c72aad9
 
 .PHONY: image push
 
@@ -9,13 +9,9 @@ image:
 push:
 	docker push $(IMAGE)
 
-install:
-	helm repo add jupyterhub
-	helm repo update
-	helm install hub jupyterhub --version=$(HUB_VERSION) -f config.yaml -f secrets.yaml
-
 upgrade:
-	helm install --upgrade hub jupyterhub --version=$(HUB_VERSION) -f config.yaml -f secrets.yaml
+	# helm dep up ./jupyterhub
+	helm upgrade --install hub ./jupyterhub -f config.yaml -f secrets.yaml --namespace=default
 
 conda:
 	docker build -t conda-pkgs conda-recipes
