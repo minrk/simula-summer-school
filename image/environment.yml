@@ -3,17 +3,22 @@ channels:
   - defaults
   - minrk
 dependencies:
-  - python=3.6
+  # scientific packages
   - fenics=2017.2.0
   - neuron=7.4
   - lfpy=2.0
-  - nbdime
+  # basic Python
+  - python=3.6
   - matplotlib
   - scipy
   - numpy
   - pandas
+  # IPython/Jupyter
+  - nbdime
   - notebook=5.4
   - ipykernel
   - ipywidgets=7.2
+  # octave
   - octave
   - octave_kernel
+  - ghostscript
