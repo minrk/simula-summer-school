@@ -59,3 +59,4 @@ RUN jupyter nbextension install --sys-prefix /tmp/pull-button.js && \
 
 WORKDIR /home/$NB_USER
 ENV SHELL=/bin/bash
+ENV LANG=en_US.UTF-8
