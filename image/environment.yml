@@ -2,11 +2,14 @@ channels:
   - conda-forge
   - defaults
   - minrk
+  - electrostatics
 dependencies:
   # scientific packages
   - fenics=2017.2.0
   - neuron=7.4
   - lfpy=2.0
+  - apbs
+  - browndye=2016.01.31
   # basic Python
   - python=3.6
   - matplotlib
