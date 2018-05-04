@@ -59,6 +59,17 @@ grafana:
     enabled: true
     accessModes:
       - ReadWriteOnce
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.simula-summer-school.minrk.net
+          access: direct
+          isDefault: true
+          editable: false
 
 prometheus:
   nodeExporter:
