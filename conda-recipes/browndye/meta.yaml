@@ -1,0 +1,26 @@
+{% set name = 'browndye' %}
+{% set version = "2016.01.31" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}.tar.gz
+  url: https://browndye.ucsd.edu/browndye.tar.gz
+  sha256: 1ff0dc865725a3f7b393e24938c7d520c355d7bb22b83b0eeaba9261d7cd1004
+
+build:
+  number: {{ build }}
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+
+test:
+  source_files:
+    - thrombin-example
+  requires:
+    - apbs
