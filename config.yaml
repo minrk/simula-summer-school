@@ -42,6 +42,13 @@ jupyterhub:
       enabled: true
 
 grafana:
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_name: Main Org.
+      org_role: Viewer
+    auth.basic:
+      enabled: true
   ingress:
     enabled: true
     annotations:
