@@ -16,6 +16,10 @@ jupyterhub:
           - simula-summer-school.minrk.net
   auth:
     type: github
+    admin:
+      access: true
+      users:
+        - minrk
     github:
       callbackUrl: "https://simula-summer-school.minrk.net/hub/oauth_callback"
 
@@ -32,12 +36,6 @@ jupyterhub:
     cpu:
       limit: 1
       guarantee: 0.1
-
-  auth:
-    admin:
-      access: true
-      users:
-        - minrk
 
   prePuller:
     continuous:
