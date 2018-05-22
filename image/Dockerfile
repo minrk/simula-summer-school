@@ -39,7 +39,6 @@ ENV PATH=$PATH:${CONDA_DIR}/envs/carp/bin
 # install some extra things with requirements.txt
 ADD requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache -r /tmp/requirements.txt
-RUN pip install --no-cache --pre 'nbdime>=1.0.0rc1'
 
 
 # enable nbdime globally
