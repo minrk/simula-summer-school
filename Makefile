@@ -1,5 +1,7 @@
 IMAGE=minrk/simula-summer-school:2018
 KUBE_CTX=sss
+GKE_PROJECT=simula-summer-school-202212
+GKE_ZONE=europe-west1-d
 
 .PHONY: image push
 
@@ -24,10 +26,9 @@ run:
 	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook --ip=0.0.0.0
 
 pull:
-	- kubectl --context=$(KUBE_CTX) delete jobs pull-manual 2>/dev/null
-	kubectl --context=$(KUBE_CTX) create -f ./puller.yaml
-	- watch kubectl --context=$(KUBE_CTX) get pods -a --selector=job-name=pull-manual
-	kubectl --context=$(KUBE_CTX) delete jobs pull-manual
+	- $(foreach instance, \
+		$(shell gcloud compute instances list --format json --project=$(GKE_PROJECT) | jq -r ".[].name"), \
+  		gcloud --project=$(GKE_PROJECT) compute ssh --zone=$(GKE_ZONE) $(instance) -- docker pull $(IMAGE))
 
 clean-jobs:
 	kubectl --context=$(KUBE_CTX) delete jobs $(shell kubectl get jobs -a | sed '1d' | awk '{print $$1}')
