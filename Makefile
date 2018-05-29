@@ -1,5 +1,4 @@
 IMAGE=minrk/simula-summer-school:2018
-HUB_VERSION=v0.7-c72aad9
 KUBE_CTX=sss
 
 .PHONY: image push
@@ -11,7 +10,7 @@ push:
 	docker push $(IMAGE)
 
 upgrade:
-	# helm dep up ./jupyterhub
+	helm dep up ./jupyterhub
 	helm upgrade hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --namespace=default
 
 conda:

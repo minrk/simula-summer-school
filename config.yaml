@@ -41,6 +41,11 @@ jupyterhub:
     continuous:
       enabled: true
 
+  hub:
+    extraConfig:
+      slowSpawn: |
+        c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
+
 grafana:
   grafana.ini:
     auth.anonymous:
