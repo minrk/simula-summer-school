@@ -29,12 +29,12 @@ COPY environment.yml /tmp/environment.yml
 RUN conda env update -n root -f /tmp/environment.yml \
  && conda clean -tipsy
 
-# install carp in its own env since it has petsc conflicts
-RUN conda create -y -c minrk -n carp carpentry \
- && conda clean -tipsy
-ENV CARP_LICENSE=${CONDA_DIR}/envs/carp/etc/carp/license.bin
-# Add CARP at the *end* of the PATH
-ENV PATH=$PATH:${CONDA_DIR}/envs/carp/bin
+# # install carp in its own env since it has petsc conflicts
+# RUN conda create -y -c minrk -n carp carpentry \
+#  && conda clean -tipsy
+# ENV CARP_LICENSE=${CONDA_DIR}/envs/carp/etc/carp/license.bin
+# # Add CARP at the *end* of the PATH
+# ENV PATH=$PATH:${CONDA_DIR}/envs/carp/bin
 
 # install some extra things with requirements.txt
 ADD requirements.txt /tmp/requirements.txt
