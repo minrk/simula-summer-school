@@ -6,6 +6,7 @@ channels:
 dependencies:
   # scientific packages
   - fenics=2017.2.0
+  - mshr=2017.2.0
   - neuron=7.4
   - lfpy=2.0
   - apbs
