@@ -1,6 +1,6 @@
 {% set name = 'LFPy' %}
 {% set version = "2.0rc3" %}
-{% set build = 1 %}
+{% set build = 2 %}
 
 package:
   name: {{ name | lower }}
@@ -13,7 +13,7 @@ source:
 
 build:
   number: {{ build }}
-  script: "pip install -v --no-binary :all: --no-deps ."
+  script: "pip install --no-binary :all: --no-deps ."
 
 requirements:
   build:
@@ -22,18 +22,18 @@ requirements:
     - pip
     - cython
     - numpy 1.13.* *openblas*
-    - neuron 7.4.*
+    - neuron 7.5.*
   run:
     - python
     - setuptools
     - python-csa >=0.1.8
     - cython
     - numpy 1.13.* *openblas*
-    - scipy
+    - scipy * *openblas*
     - matplotlib
     - h5py
     - mpi4py
-    - neuron 7.4.*
+    - neuron
 
 test:
   imports:

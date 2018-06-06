@@ -6,6 +6,8 @@ USER jovyan
 RUN conda install -yq conda-build anaconda-client
 # add electrostatics for abpm
 RUN conda config --append channels electrostatics
+RUN conda config --append channels minrk
+RUN conda config --add channels conda-forge
 
 # COPY browndye browndye
 # RUN conda build browndye

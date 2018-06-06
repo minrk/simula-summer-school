@@ -1,5 +1,5 @@
-{% set version = "7.4" %}
-{% set build = 3 %}
+{% set version = "7.5" %}
+{% set build = 0 %}
 
 package:
   name: neuron
@@ -8,10 +8,12 @@ package:
 source:
   fn: nrn-{{ version }}.tar.gz
   url: https://www.neuron.yale.edu/ftp/neuron/versions/v{{ version }}/nrn-{{ version }}.tar.gz
-  sha256: 1403ba16b2b329d2376f4bf007d96e6bf2992fa850f137f1068ad5b22b432de6
+  sha256: 67642216a969fdc844da1bd56643edeed5e9f9ab8c2a3049dcbcbcccba29c336
 
 build:
   number: {{ build }}
+  run_exports:
+    - pin_compatible("neuron", max_pin="x.x", min_pin="x.x")
 
 requirements:
   build:
@@ -27,9 +29,11 @@ requirements:
     - python
     - readline 7.*
     - ncurses
+    - scipy
 
 test:
   files:
     - Nap_Et2.mod
   imports:
     - neuron
+    - neuron.rxd

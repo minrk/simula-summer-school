@@ -7,7 +7,7 @@ dependencies:
   # scientific packages
   - fenics=2017.2.0
   - mshr=2017.2.0
-  - neuron=7.4
+  - neuron=7.5
   - lfpy=2.0
   - apbs
   - browndye=2016.01.31
