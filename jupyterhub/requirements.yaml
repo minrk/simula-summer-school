@@ -12,5 +12,5 @@ dependencies:
    version: 0.4.0
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: jupyterhub
-   version: v0.7-43d04f8
+   version: v0.7-0e1225e
    repository: https://jupyterhub.github.io/helm-chart
