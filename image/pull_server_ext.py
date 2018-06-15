@@ -72,7 +72,7 @@ from tornado.web import authenticated
 from tornado.gen import coroutine
 
 class PullEverythingHandler(IPythonHandler):
-    
+
     @property
     def pull_pool(self):
         if 'pull_pool' not in self.settings:
@@ -96,5 +96,5 @@ def setup_handlers(web_app):
 
 def load_jupyter_server_extension(nbapp):
     setup_handlers(nbapp.web_app)
-    pull_everything()
+    ThreadPoolExecutor(1).submit(pull_everything)
 
