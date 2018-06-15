@@ -28,6 +28,9 @@ USER $NB_UID
 COPY environment.yml /tmp/environment.yml
 RUN conda env update -n root -f /tmp/environment.yml \
  && conda clean -tipsy
+# ensure libstdc++ comes from libstdcxx, not gcc 4.8
+RUN conda install -y --force libstdcxx-ng=7.2.* \
+ && conda clean -tipsy
 
 # # install carp in its own env since it has petsc conflicts
 # RUN conda create -y -c minrk -n carp carpentry \
