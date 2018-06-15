@@ -32,10 +32,10 @@ jupyterhub:
       pullPolicy: Always
     memory:
       limit: 2G
-      guarantee: 256M
+      guarantee: 2G
     cpu:
-      limit: 1
-      guarantee: 0.1
+      limit: 2
+      guarantee: 0.25
 
   prePuller:
     continuous:
