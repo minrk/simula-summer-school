@@ -1,2 +1,2 @@
 # add repos here (full git urls)
-https://github.com/andossy/SUURPh-summer-school
+http://github.com/andossy/SSCP_2018
