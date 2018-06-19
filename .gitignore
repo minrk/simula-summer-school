@@ -4,3 +4,7 @@ __pycache__
 home
 jupyterhub/charts
 jupyterhub/requirements.lock
+
+# home files
+.*
+conda-bld
