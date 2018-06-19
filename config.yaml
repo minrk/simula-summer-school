@@ -38,6 +38,12 @@ jupyterhub:
     cpu:
       limit: 2
       guarantee: 0.25
+    schedulerStrategy: pack
+    extraEnv:
+      CULL_CONNECTED: '1'
+      CULL_TIMEOUT: '1800'
+      CULL_KERNEL_TIMEOUT: '1800'
+      CULL_INTERVAL: '120'
 
   prePuller:
     continuous:
