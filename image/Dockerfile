@@ -50,7 +50,7 @@ RUN nbdime config-git --enable --system
 USER $NB_UID
 
 # install git-puller
-RUN pip install --no-cache https://github.com/minrk/nbpuller/archive/simula.tar.gz
+RUN pip install --no-cache nbgitpuller==0.4.0
 
 ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
 RUN jupyter serverextension enable --sys-prefix pull_server_ext

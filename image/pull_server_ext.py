@@ -1,32 +1,11 @@
 """
 A severely stripped-down version of data-8/nbpuller
 """
-import os
 
-import git
 import requests
 from tornado.log import app_log
 
-from nbpuller.pull_from_remote import (
-    _reset_deleted_files,
-    _pull_and_resolve_conflicts,
-)
-
-def _make_commit_if_dirty(repo, repo_dir):
-    """
-    Makes a commit with message 'WIP' if there are changes.
-    
-    from nbpuller
-    """
-    if repo.is_dirty():
-        git_cli = repo.git
-        git_cli.add('-A')
-
-        app_log.info("Adding files: %s", git_cli.status())
-
-        git_cli.commit('-m', 'WIP')
-
-        app_log.info('Made WIP commit')
+from nbgitpuller.pull import GitPuller
 
 def pull_repo(repo_url):
 
@@ -35,17 +14,10 @@ def pull_repo(repo_url):
     if repo_dir.endswith('.git'):
         repo_dir = repo_dir[:-4]
 
-    if not os.path.exists(repo_dir):
-        app_log.info("Cloning %s into %s", repo_url, repo_dir)
-        git.Repo.clone_from(repo_url, repo_dir)
-    else:
-        app_log.info("Updating %s", repo_url)
-    repo = git.Repo(repo_dir)
-
-    _reset_deleted_files(repo, branch_name)
-    _make_commit_if_dirty(repo, repo_dir)
-
-    _pull_and_resolve_conflicts(repo, branch_name)
+    app_log.info("Pulling %s", repo_url)
+    gp = GitPuller(repo_url, branch_name, repo_dir)
+    for line in gp.pull():
+        app_log.info(line.rstrip('\n'))
 
 
 def pull_everything():
