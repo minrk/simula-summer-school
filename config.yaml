@@ -42,6 +42,9 @@ jupyterhub:
       enabled: true
 
   hub:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: /hub/metrics
     extraConfig:
       slowSpawn: |
         c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
