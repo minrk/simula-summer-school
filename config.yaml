@@ -52,6 +52,25 @@ jupyterhub:
     extraConfig:
       slowSpawn: |
         c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
+      api404: |
+        from tornado import web
+        class FourOFour(web.RequestHandler):
+            def get(self):
+                raise web.HTTPError(404, "Server is not running")
+        from jupyterhub.app import JupyterHub
+        from tornado.ioloop import IOLoop
+        def f():
+            app = JupyterHub.instance()
+            if not getattr(app, 'tornado_application', None):
+                IOLoop.current().call_later(1, f)
+                return
+            app.log.info("Adding 404 handler")
+            host_pattern = '.*$'
+            app.tornado_application.add_handlers(
+                '.*$',
+                [(r"/user/[^/]+/api/.*", FourOFour)]
+            )
+        IOLoop.current().add_callback(f)
 
 grafana:
   nodeSelector:
