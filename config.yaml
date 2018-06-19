@@ -1,5 +1,7 @@
 jupyterhub:
   proxy:
+    nodeSelector:
+      cloud.google.com/gke-nodepool: default-pool
     service:
       type: ClusterIP
   ingress:
@@ -42,6 +44,8 @@ jupyterhub:
       enabled: true
 
   hub:
+    nodeSelector:
+      cloud.google.com/gke-nodepool: default-pool
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/path: /hub/metrics
@@ -50,6 +54,8 @@ jupyterhub:
         c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
 
 grafana:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -85,6 +91,8 @@ grafana:
           editable: false
 
 prometheus:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
   nodeExporter:
     updateStrategy:
       type: RollingUpdate
@@ -115,6 +123,8 @@ kube-lego:
     create: true
 
 nginx-ingress:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
   rbac:
     create: true
   statsExporter:
