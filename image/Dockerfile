@@ -63,3 +63,11 @@ WORKDIR /home/$NB_USER
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
 ADD jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
+USER root
+RUN apt-get update && apt-get -yq dist-upgrade \
+ && apt-get install -yq --no-install-recommends \
+    libncurses5-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+USER $NB_UID
+RUN conda install -c minrk -yq browndye=2018.06.22
