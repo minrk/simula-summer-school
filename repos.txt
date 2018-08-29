@@ -1,2 +1,2 @@
 # add repos here (full git urls)
-http://github.com/andossy/SSCP_2018
+https://github.com/minrk/simula-workshop

@@ -6,11 +6,11 @@ dependencies:
    version: 6.2.1
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: grafana
-   version: 1.2.0
+   version: 1.14.1
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: kube-lego
    version: 0.4.0
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: jupyterhub
-   version: v0.7-0e1225e
+   version: 0.7.0-a70c431
    repository: https://jupyterhub.github.io/helm-chart

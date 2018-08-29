@@ -1,7 +1,7 @@
-IMAGE=minrk/simula-summer-school:2018
-KUBE_CTX=sss
+IMAGE=minrk/simula-summer-school:2018-seminar
+KUBE_CTX=workshop
 GKE_PROJECT=simula-summer-school-202212
-GKE_ZONE=europe-west1-d
+GKE_ZONE=europe-west1-c
 
 .PHONY: image push
 
@@ -13,7 +13,7 @@ push:
 
 upgrade:
 	helm dep up ./jupyterhub
-	helm upgrade hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --namespace=default
+	helm upgrade --install hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --namespace=default
 
 conda:
 	docker build -t conda-pkgs conda-recipes

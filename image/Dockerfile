@@ -70,4 +70,3 @@ RUN apt-get update && apt-get -yq dist-upgrade \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_UID
-RUN conda install -c minrk -yq browndye=2018.06.22

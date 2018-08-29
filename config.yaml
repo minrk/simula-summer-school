@@ -11,11 +11,11 @@ jupyterhub:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - simula-summer-school.minrk.net
+      - simula-workshop.minrk.net
     tls:
       - secretName: kubelego-tls-jupyterhub
         hosts:
-          - simula-summer-school.minrk.net
+        - simula-workshop.minrk.net
   auth:
     type: github
     admin:
@@ -23,14 +23,14 @@ jupyterhub:
       users:
         - minrk
     github:
-      callbackUrl: "https://simula-summer-school.minrk.net/hub/oauth_callback"
+      callbackUrl: "https://simula-workshop.minrk.net/hub/oauth_callback"
 
   singleuser:
     storage:
       homeMountPath: /home/user
     image:
       name: minrk/simula-summer-school
-      tag: 2018
+      tag: 2018-seminar
       pullPolicy: Always
     memory:
       limit: 1G
@@ -94,12 +94,13 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - grafana.simula-summer-school.minrk.net
+      - grafana.simula-workshop.minrk.net
     tls:
       - hosts:
-          - grafana.simula-summer-school.minrk.net
+          - grafana.simula-workshop.minrk.net
         secretName: kubelego-tls-grafana
   persistence:
+    size: 2Gi
     enabled: true
     accessModes:
       - ReadWriteOnce
@@ -110,7 +111,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.simula-summer-school.minrk.net
+          url: https://prometheus.simula-workshop.minrk.net
           access: direct
           isDefault: true
           editable: false
@@ -134,10 +135,10 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - prometheus.simula-summer-school.minrk.net
+        - prometheus.simula-workshop.minrk.net
       tls:
         - hosts:
-            - prometheus.simula-summer-school.minrk.net
+            - prometheus.simula-workshop.minrk.net
           secretName: kubelego-tls-prometheus
 
 kube-lego:
