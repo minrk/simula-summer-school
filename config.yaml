@@ -26,6 +26,7 @@ jupyterhub:
       callbackUrl: "https://simula-workshop.minrk.net/hub/oauth_callback"
 
   singleuser:
+    cmd: jupyter-labhub
     storage:
       homeMountPath: /home/user
     image:
