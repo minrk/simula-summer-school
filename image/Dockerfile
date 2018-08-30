@@ -63,10 +63,25 @@ WORKDIR /home/$NB_USER
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
 ADD jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
-USER root
-RUN apt-get update && apt-get -yq dist-upgrade \
- && apt-get install -yq --no-install-recommends \
-    libncurses5-dev \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-USER $NB_UID
+# USER root
+# RUN apt-get update && apt-get -yq dist-upgrade \
+#  && apt-get install -yq --no-install-recommends \
+#     libncurses5-dev \
+#  && apt-get clean \
+#  && rm -rf /var/lib/apt/lists/*
+# USER $NB_UID
+RUN conda install -yq ncurses=6.1.* nodejs=8.* && conda clean -tipsy
+# RUN pip install --no-cache -v git+https://github.com/vidartf/unray#egg=unray
+RUN conda install -yq cython numba && conda clean -tipsy
+RUN \
+    jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
+    jupyter labextension install @jupyterlab/hub-extension --no-build && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
+    jupyter lab clean && jupyter lab build --dev && \
+    jupyter lab clean
+# RUN wget http://download.processing.org/processing-3.4-linux64.tgz && \
+#     tar -xzf processing-3.4-linux64.tgz && \
+#     mv processing-3.4 /opt/conda/processing && \
+#     rm processing-3.4-linux64.tgz
+# ENV PROCESSING_JAVA=/opt/conda/processing/processing-java
+RUN pip install --no-cache metakernel-bash
