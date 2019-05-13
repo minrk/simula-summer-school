@@ -1,8 +1,9 @@
-ARG BASE_TAG=9f9e5ca8fe5a
-FROM jupyter/scipy-notebook:${BASE_TAG}
-USER root
-RUN apt-get -y update && apt-get -y install libtinfo-dev ocaml
-USER jovyan
+# ARG BASE_TAG=abdb27a6dfbb
+# FROM jupyter/scipy-notebook:${BASE_TAG}
+from continuumio/miniconda3:4.6.14
+# USER root
+# RUN apt-get -y update && apt-get -y install ocaml
+# USER jovyan
 RUN conda install -yq conda-build anaconda-client
 # add electrostatics for abpm
 RUN conda config --append channels electrostatics
@@ -18,6 +19,7 @@ RUN conda config --add channels conda-forge
 # RUN conda build carpentry
 # ADD neuron neuron
 # RUN conda build neuron
+# ENV CONDA_PY 3.7
 # ADD csa csa
 # RUN conda build csa
 # ADD lfpy lfpy
