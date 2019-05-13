@@ -77,6 +77,7 @@ RUN \
     jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
     jupyter labextension install @jupyterlab/hub-extension --no-build && \
     jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
+    jupyter labextension install nbdime-jupyterlab@0.5.0 --no-build && \
     jupyter lab clean && jupyter lab build --dev && \
     jupyter lab clean
 # RUN wget http://download.processing.org/processing-3.4-linux64.tgz && \
