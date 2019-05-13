@@ -85,4 +85,5 @@ RUN \
 #     mv processing-3.4 /opt/conda/processing && \
 #     rm processing-3.4-linux64.tgz
 # ENV PROCESSING_JAVA=/opt/conda/processing/processing-java
-RUN pip install --no-cache metakernel-bash
+RUN pip install --no-cache metakernel-bash && \
+    mv -v $HOME/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels
