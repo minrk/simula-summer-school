@@ -1,22 +1,17 @@
 Basic setup: create project, select it, create cluster and init helm
 
-    gcloud projects create simula-summer-school-2017
-    gcloud config set project simula-summer-school-2017
-    kubectl config use-context gke_simula-summer-school-2017_us-central1-a_simula-summer-school-2017
-    gcloud container clusters create simula-summer-school-2017 --num-nodes=1 --machine-type n1-standard-4
-    gcloud beta container clusters upgrade --cluster-version 1.6.4 --master simula-summer-school-2017
+    gcloud projects create simula-summer-school
+    gcloud config set project simula-summer-school
+    gcloud container clusters create sss --zone=europe-west1-b --num-nodes=1 --machine-type n1-standard-4
     helm init
 
 Switch to simula-summer-school:
 
-    kubectl config use-context gke_simula-summer-school-2017_us-central1-a_simula-summer-school-2017
+    kubectx sss=.
+    kubectx sss
 
 Delete it all: `helm delete --purge hub`
 
-
-Ingress (binderhub-deploy repo):
-
-    helm install --namespace support support --name support
 Redeploy:
 
     helm delete --purge hub
