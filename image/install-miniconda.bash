@@ -3,7 +3,7 @@
 set -ex
 
 cd $(dirname $0)
-CONDA_VERSION=4.5.4
+CONDA_VERSION=4.6.14
 URL="https://repo.continuum.io/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh"
 INSTALLER_PATH=/tmp/miniconda-installer.sh
 
@@ -12,7 +12,7 @@ chmod +x ${INSTALLER_PATH}
 
 # Only MD5 checksums are available for miniconda
 # Can be obtained from https://repo.continuum.io/miniconda/
-MD5SUM="a946ea1d0c4a642ddf0c3a26a18bb16d"
+MD5SUM="718259965f234088d785cad1fbd7de03"
 
 if ! echo "${MD5SUM}  ${INSTALLER_PATH}" | md5sum  --quiet -c -; then
     echo "md5sum mismatch for ${INSTALLER_PATH}, exiting!"
@@ -24,7 +24,7 @@ export PATH="${CONDA_DIR}/bin:$PATH"
 
 # Allow easy direct installs from conda forge
 conda config --system --add channels conda-forge
-conda install -yq conda=4.5
+conda install -yq conda=4.6
 
 # Do not attempt to auto update conda or dependencies
 conda config --system --set auto_update_conda false

@@ -29,8 +29,8 @@ COPY environment.yml /tmp/environment.yml
 RUN conda env update -n root -f /tmp/environment.yml \
  && conda clean -tipsy
 # ensure libstdc++ comes from libstdcxx, not gcc 4.8
-RUN conda install -y --force libstdcxx-ng=7.2.* \
- && conda clean -tipsy
+# RUN conda install -y --force libstdcxx-ng=7.2.* \
+ # && conda clean -tipsy
 
 # # install carp in its own env since it has petsc conflicts
 # RUN conda create -y -c minrk -n carp carpentry \
@@ -52,7 +52,7 @@ USER $NB_UID
 # install git-puller
 RUN pip install --no-cache nbgitpuller==0.4.0
 
-ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
+ADD pull_server_ext.py /opt/conda/lib/python3.7/site-packages/pull_server_ext.py
 RUN jupyter serverextension enable --sys-prefix pull_server_ext
 RUN jupyter serverextension enable --sys-prefix nbdime
 ADD pull-button.js /tmp/
@@ -70,16 +70,13 @@ ADD jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
 #  && apt-get clean \
 #  && rm -rf /var/lib/apt/lists/*
 # USER $NB_UID
-RUN conda install -yq ncurses=6.1.* nodejs=8.* && conda clean -tipsy
-# RUN pip install --no-cache -v git+https://github.com/vidartf/unray#egg=unray
-RUN conda install -yq cython numba && conda clean -tipsy
-RUN \
-    jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
-    jupyter labextension install @jupyterlab/hub-extension --no-build && \
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
-    jupyter labextension install nbdime-jupyterlab@0.5.0 --no-build && \
-    jupyter lab clean && jupyter lab build --dev && \
-    jupyter lab clean
+# RUN \
+#     jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
+#     jupyter labextension install @jupyterlab/hub-extension --no-build && \
+#     jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
+#     jupyter labextension install nbdime-jupyterlab@0.5.0 --no-build && \
+#     jupyter lab clean && jupyter lab build --dev && \
+#     jupyter lab clean
 # RUN wget http://download.processing.org/processing-3.4-linux64.tgz && \
 #     tar -xzf processing-3.4-linux64.tgz && \
 #     mv processing-3.4 /opt/conda/processing && \

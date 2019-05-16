@@ -1,7 +1,7 @@
-IMAGE=minrk/simula-summer-school:2018-seminar
-KUBE_CTX=workshop
+IMAGE=minrk/simula-summer-school:2019
+KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-202212
-GKE_ZONE=europe-west1-c
+GKE_ZONE=europe-west1-b
 
 .PHONY: image push
 

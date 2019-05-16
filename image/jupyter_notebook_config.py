@@ -1,4 +1,7 @@
 import os
+
+c = get_config() # noqa
+
 if os.getenv('CULL_TIMEOUT'):
     # shutdown the server after no activity
     c.NotebookApp.shutdown_no_activity_timeout = int(os.getenv('CULL_TIMEOUT'))
