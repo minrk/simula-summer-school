@@ -24,4 +24,3 @@ dependencies:
   - notebook=5.7
   - ipykernel
   - ipywidgets=7.4
-  - octave_kernel

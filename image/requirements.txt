@@ -2,3 +2,7 @@ wurlitzer
 jupyterhub==1.0.0
 metakernel-bash
 nbgitpuller==0.4.0
+lfpy==2.0.2
+# nbnovnc requires tornado 5.0.2
+tornado==5.0.2
+https://github.com/ryanlovett/nbnovnc/archive/83668e7769e54876a0e4b0525750888ae3b70371.zip
