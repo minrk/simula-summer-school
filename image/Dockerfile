@@ -52,7 +52,7 @@ USER $NB_UID
 # install git-puller
 RUN pip install --no-cache nbgitpuller==0.4.0
 
-ADD pull_server_ext.py /opt/conda/lib/python3.7/site-packages/pull_server_ext.py
+ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
 RUN jupyter serverextension enable --sys-prefix pull_server_ext
 RUN jupyter serverextension enable --sys-prefix nbdime
 ADD pull-button.js /tmp/
