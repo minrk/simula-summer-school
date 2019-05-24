@@ -22,6 +22,7 @@ jupyterhub:
       access: true
       users:
         - minrk
+        - kjmccabe
     github:
       callbackUrl: "https://simula.minrk.net/hub/oauth_callback"
 
@@ -61,6 +62,7 @@ jupyterhub:
         c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
       noAuthMetrics: |
         c.JupyterHub.authenticate_prometheus = False
+
 grafana:
   nodeSelector:
     cloud.google.com/gke-nodepool: default-pool
