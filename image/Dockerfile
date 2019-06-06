@@ -64,6 +64,12 @@ ADD requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache -r /tmp/requirements.txt && \
     mv -v $HOME/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels
 
+# late additions
+# add to environment.yml later
+RUN conda install -yq mshr=2019.1 \
+ && conda clean -pity
+RUN pip install --no-cache neo
+
 RUN \
     # jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
     jupyter labextension install @jupyterlab/hub-extension --no-build && \

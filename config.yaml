@@ -39,7 +39,7 @@ jupyterhub:
       guarantee: 512M
     cpu:
       limit: 1
-      guarantee: 0.1
+      guarantee: 0.25
     schedulerStrategy: pack
     extraEnv:
       CULL_CONNECTED: '1'
@@ -62,6 +62,14 @@ jupyterhub:
         c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
       noAuthMetrics: |
         c.JupyterHub.authenticate_prometheus = False
+  scheduling:
+    userScheduler:
+      enabled: true
+    podPriority:
+      enabled: true
+    userPlaceholder:
+      enabled: true
+      replicas: 4
 
 grafana:
   nodeSelector:
