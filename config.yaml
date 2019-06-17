@@ -69,7 +69,7 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 4
+      replicas: 3
 
 grafana:
   nodeSelector:
