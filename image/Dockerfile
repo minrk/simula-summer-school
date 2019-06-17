@@ -84,6 +84,8 @@ USER root
 RUN nbdime config-git --enable --system
 USER $NB_UID
 
+RUN conda install -yq scipy && conda clean -pity
+
 ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
 ADD pull-button.js /tmp/
 RUN jupyter serverextension enable --sys-prefix pull_server_ext && \
