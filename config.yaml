@@ -35,8 +35,8 @@ jupyterhub:
       tag: '2019'
       pullPolicy: Always
     memory:
-      limit: 1G
-      guarantee: 512M
+      limit: 2G
+      guarantee: 1G
     cpu:
       limit: 2
       guarantee: 1
