@@ -38,8 +38,8 @@ jupyterhub:
       limit: 1G
       guarantee: 512M
     cpu:
-      limit: 1
-      guarantee: 0.25
+      limit: 2
+      guarantee: 1
     schedulerStrategy: pack
     extraEnv:
       CULL_CONNECTED: '1'
