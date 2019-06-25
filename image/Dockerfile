@@ -86,6 +86,9 @@ USER $NB_UID
 
 RUN conda install -yq scipy && conda clean -pity
 
+# fenics 3d plotting doesn't like mpl 3
+RUN pip install --no-cache 'matplotlib<3'
+
 ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
 ADD pull-button.js /tmp/
 RUN jupyter serverextension enable --sys-prefix pull_server_ext && \
