@@ -28,8 +28,7 @@ jupyterhub:
 
   singleuser:
     cmd: jupyter-labhub
-    events:
-      enabled: true
+    events: true
     storage:
       homeMountPath: /home/user
     image:
