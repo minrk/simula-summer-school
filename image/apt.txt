@@ -10,3 +10,17 @@ nano
 sudo
 vim
 wget
+
+# octave
+octave
+gnuplot-nox
+ghostscript
+
+# novnc
+tightvncserver
+novnc
+websockify
+supervisor
+xinit
+xfonts-base
+xterm

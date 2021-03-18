@@ -1,14 +1,12 @@
 # ARG BASE_TAG=abdb27a6dfbb
 # FROM jupyter/scipy-notebook:${BASE_TAG}
-from continuumio/miniconda3:4.6.14
+from condaforge/mambaforge:4.9.2-5
 # USER root
-# RUN apt-get -y update && apt-get -y install ocaml
-# USER jovyan
-RUN conda install -yq conda-build anaconda-client
-# add electrostatics for abpm
-RUN conda config --append channels electrostatics
+RUN apt-get -y update && apt-get -y install rsync patch git make
+RUN mamba install -yq conda-build anaconda-client
 RUN conda config --append channels minrk
-RUN conda config --add channels conda-forge
+RUN mamba install -y conda-forge-pinning
+COPY build-conda /usr/local/bin/build-conda
 
 # COPY browndye browndye
 # RUN conda build browndye

@@ -1,11 +1,11 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 COPY apt.txt /tmp/apt.txt
 RUN apt-get update && apt-get -yq dist-upgrade \
  && apt-get install -yq --no-install-recommends \
-    $(cat /tmp/apt.txt | sort) \
+    $(cat /tmp/apt.txt | grep -v '^#' | sort) \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -20,16 +20,13 @@ ENV NB_UID=1000 \
 
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
 
-# install miniconda
+# setup conda env
+ENV PATH=$CONDA_DIR/bin:$PATH
+COPY conda-linux-64.lock /tmp/conda.lock
 COPY install-miniconda.bash /tmp/install-miniconda.bash
 RUN bash /tmp/install-miniconda.bash
-ENV PATH=$CONDA_DIR/bin:$PATH
+COPY condarc $CONDA_DIR/.condarc
 
-USER $NB_UID
-# setup root env
-COPY environment.yml /tmp/environment.yml
-RUN conda env update -n root -f /tmp/environment.yml \
- && conda clean -tipsy
 # ensure libstdc++ comes from libstdcxx, not gcc 4.8
 # RUN conda install -y --force libstdcxx-ng=7.2.* \
  # && conda clean -tipsy
@@ -41,58 +38,32 @@ RUN conda env update -n root -f /tmp/environment.yml \
 # Add CARP at the *end* of the PATH
 # ENV PATH=$PATH:${CONDA_DIR}/envs/carp/bin
 
-# install octave with apt
-USER root
-ADD apt-octave.txt /tmp/apt-octave.txt
-RUN apt-get update \
- && apt-get install -yq --no-install-recommends \
-    $(cat /tmp/apt-octave.txt | sort) \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-
-# install novnc
-RUN apt-get update \
- && apt-get install -yq --no-install-recommends \
-    tightvncserver novnc websockify supervisor xinit xfonts-base xterm \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-
 USER $NB_UID
 
 # install some extra things with requirements.txt
-ADD requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache -r /tmp/requirements.txt && \
-    mv -v $HOME/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels
+# COPY requirements.txt /tmp/requirements.txt
+# RUN pip install --no-cache -r /tmp/requirements.txt && \
+#     mv -v $HOME/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels
 
-# late additions
-# add to environment.yml later
-RUN conda install -yq mshr=2019.1 \
- && conda clean -pity
-RUN pip install --no-cache neo
-
-RUN \
-    # jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
-    jupyter labextension install @jupyterlab/hub-extension --no-build && \
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-    # jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
-    # jupyter labextension install nbdime-jupyterlab@0.5.0 --no-build && \
-    jupyter lab clean && jupyter lab build --dev && \
-    jupyter lab clean
+# RUN \
+#     # jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
+#     jupyter labextension install @jupyterlab/hub-extension --no-build && \
+#     jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
+#     # jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
+#     # jupyter labextension install nbdime-jupyterlab@0.5.0 --no-build && \
+#     jupyter lab clean && jupyter lab build --dev && \
+#     jupyter lab clean
 
 # enable nbdime globally
 USER root
 RUN nbdime config-git --enable --system
 USER $NB_UID
 
-RUN conda install -yq scipy && conda clean -pity
-
 # fenics 3d plotting doesn't like mpl 3
-RUN pip install --no-cache 'matplotlib<3'
+# RUN pip install --no-cache 'matplotlib<3'
 
-RUN conda install -yq scikit-learn && conda clean -pity
-
-ADD pull_server_ext.py /opt/conda/lib/python3.6/site-packages/pull_server_ext.py
-ADD pull-button.js /tmp/
+COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.8/site-packages/pull_server_ext.py
+COPY pull-button.js /tmp/
 RUN jupyter serverextension enable --sys-prefix pull_server_ext && \
     jupyter serverextension enable --sys-prefix nbdime && \
     jupyter nbextension     install --sys-prefix /tmp/pull-button.js && \
@@ -102,7 +73,7 @@ RUN jupyter serverextension enable --sys-prefix pull_server_ext && \
     # jupyter nbextension     enable  --py --sys-prefix nbnovnc
 
 WORKDIR /home/$NB_USER
-ADD jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
+COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
 # USER root
 # RUN apt-get update && apt-get -yq dist-upgrade \
 #  && apt-get install -yq --no-install-recommends \

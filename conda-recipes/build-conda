@@ -1,0 +1,6 @@
+#!/bin/sh
+# build conda but not with mounted volume as work dir
+# which is crazy slow on mac
+rsync -aru /io/conda-bld/ /opt/conda/conda-bld/
+conda build "$@"
+rsync -aru /opt/conda/conda-bld/ /io/conda-bld/

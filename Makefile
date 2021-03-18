@@ -1,12 +1,15 @@
-IMAGE=minrk/simula-summer-school:2019
+IMAGE=minrk/simula-summer-school:2021
 KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-202212
 GKE_ZONE=europe-west1-b
 
 .PHONY: image push
 
-image:
+image: $(wildcard image/*)
 	docker build -t $(IMAGE) image
+
+image/conda-linux-64.lock: image/environment.yml
+	cd image; conda-lock --platform linux-64 -f environment.yml 
 
 push:
 	docker push $(IMAGE)
@@ -19,8 +22,7 @@ conda:
 	docker build -t conda-pkgs conda-recipes
 
 conda/%: conda
-	- cd conda-recipes
-	docker run --rm -it -v $(PWD)/conda-bld:/opt/conda/conda-bld -v $(PWD)/conda-recipes:/conda-recipes conda-pkgs conda build /conda-recipes/$*
+	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes conda-pkgs build-conda /conda-recipes/$*
 
 run:
 	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook --ip=0.0.0.0
