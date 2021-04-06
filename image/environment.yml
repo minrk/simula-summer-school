@@ -28,6 +28,7 @@ dependencies:
   - pandas
   - altair
   - scikit-learn
+
   # IPython/Jupyter
   - nodejs=14
   - jupyterlab

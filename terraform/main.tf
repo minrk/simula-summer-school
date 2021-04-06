@@ -172,7 +172,7 @@ module "cert-manager" {
   chart_version   = "1.2.0"
   chart_namespace = "cert-manager"
   depends_on      = [kubernetes_namespace.cert-manager]
-  ingress_shim  = {
+  ingress_shim = {
     defaultIssuerName = "letsencrypt-prod"
     defaultIssuerKind = "ClusterIssuer"
   }

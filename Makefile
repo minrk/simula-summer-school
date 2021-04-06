@@ -15,6 +15,21 @@ image/conda-linux-64.lock: image/environment.yml
 push:
 	docker push $(IMAGE)
 
+builder-new:
+	docker-machine create sss-builder \
+	    --driver=google \
+	    --google-project=jupyter-simula \
+	    --google-preemptible \
+	    --google-disk-size=100 \
+	    --google-machine-type=n1-standard-4 \
+	    --google-zone=europe-west1-b
+
+builder-start:
+	docker-machine start sss-builder
+
+builder-env:
+	@docker-machine env sss-builder
+
 terraform:
 	cd terraform; terraform init; terraform apply
 
