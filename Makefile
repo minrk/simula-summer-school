@@ -1,9 +1,9 @@
 IMAGE=minrk/simula-summer-school:2021
 KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-202212
-GKE_ZONE=europe-west1-b
+GKE_ZONE=europe-west1
 
-.PHONY: image push
+.PHONY: image push conda-rsync terraform kube-creds
 
 image: $(wildcard image/*)
 	docker build -t $(IMAGE) image
@@ -14,12 +14,22 @@ image/conda-linux-64.lock: image/environment.yml
 push:
 	docker push $(IMAGE)
 
+terraform:
+	cd terraform; terraform init; terraform apply
+
+kube-creds:
+	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_ZONE) $(KUBE_CTX)
+	kubectx sss=.
+
 upgrade:
 	helm dep up ./jupyterhub
 	helm upgrade --install hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --namespace=default
 
 conda:
 	docker build -t conda-pkgs conda-recipes
+
+conda-rsync:
+	rsync -av --delete -e 'docker-machine ssh sss-builder' conda-recipes/ :$(PWD)/conda-recipes/
 
 conda/%: conda
 	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes conda-pkgs build-conda /conda-recipes/$*

@@ -1,7 +1,9 @@
+coreNodeSelector: &coreNodeSelector
+  hub.jupyter.org/node-purpose: core
+
 jupyterhub:
   proxy:
-    nodeSelector:
-      cloud.google.com/gke-nodepool: default-pool
+    nodeSelector: *coreNodeSelector
     service:
       type: ClusterIP
   ingress:
@@ -33,7 +35,7 @@ jupyterhub:
       homeMountPath: /home/user
     image:
       name: minrk/simula-summer-school
-      tag: '2019'
+      tag: '2021'
       pullPolicy: Always
     memory:
       limit: 2G
@@ -53,8 +55,7 @@ jupyterhub:
       enabled: true
 
   hub:
-    nodeSelector:
-      cloud.google.com/gke-nodepool: default-pool
+    nodeSelector: *coreNodeSelector
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/path: /hub/metrics
@@ -73,8 +74,7 @@ jupyterhub:
       replicas: 3
 
 grafana:
-  nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+  nodeSelector: *coreNodeSelector
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -111,8 +111,7 @@ grafana:
           editable: false
 
 prometheus:
-  nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+  nodeSelector: *coreNodeSelector
   nodeExporter:
     updateStrategy:
       type: RollingUpdate
@@ -143,8 +142,7 @@ kube-lego:
     create: true
 
 nginx-ingress:
-  nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+  nodeSelector: *coreNodeSelector
   rbac:
     create: true
   statsExporter:

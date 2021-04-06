@@ -8,3 +8,5 @@ jupyterhub/requirements.lock
 # home files
 .*
 conda-bld
+
+*.tfstate*
