@@ -18,15 +18,6 @@ jupyterhub:
       - secretName: kubelego-tls-jupyterhub
         hosts:
         - simula.minrk.net
-  auth:
-    type: github
-    admin:
-      access: true
-      users:
-        - minrk
-        - kjmccabe
-    github:
-      callbackUrl: "https://simula.minrk.net/hub/oauth_callback"
 
   singleuser:
     cmd: jupyter-labhub
@@ -35,7 +26,7 @@ jupyterhub:
       homeMountPath: /home/user
     image:
       name: minrk/simula-summer-school
-      tag: '2021'
+      tag: '2019' # '2021'
       pullPolicy: Always
     memory:
       limit: 2G
@@ -59,11 +50,11 @@ jupyterhub:
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/path: /hub/metrics
-    extraConfig:
-      slowSpawn: |
-        c.JupyterHub.tornado_settings.update({'slow_spawn_timeout': 1})
-      noAuthMetrics: |
-        c.JupyterHub.authenticate_prometheus = False
+    config:
+      JupyterHub:
+        authenticate_prometheus: false
+        admin_access: true
+        
   scheduling:
     userScheduler:
       enabled: true
@@ -72,6 +63,12 @@ jupyterhub:
     userPlaceholder:
       enabled: true
       replicas: 3
+    userPods:
+      nodeAffinity:
+        matchNodePurpose: prefer
+    corePods:
+      nodeAffinity:
+        matchNodePurpose: require
 
 grafana:
   nodeSelector: *coreNodeSelector

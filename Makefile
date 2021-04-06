@@ -2,6 +2,7 @@ IMAGE=minrk/simula-summer-school:2021
 KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-202212
 GKE_ZONE=europe-west1
+NS=jupyterhub
 
 .PHONY: image push conda-rsync terraform kube-creds
 
@@ -23,7 +24,7 @@ kube-creds:
 
 upgrade:
 	helm dep up ./jupyterhub
-	helm upgrade --install hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --namespace=default
+	helm upgrade --install --namespace=$(NS) hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --cleanup-on-fail
 
 conda:
 	docker build -t conda-pkgs conda-recipes
