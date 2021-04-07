@@ -1,6 +1,6 @@
-IMAGE=minrk/simula-summer-school:2021
 KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-202212
+IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2021
 GKE_ZONE=europe-west1
 NS=jupyterhub
 
@@ -11,6 +11,9 @@ image: $(wildcard image/*)
 
 image/conda-linux-64.lock: image/environment.yml
 	cd image; conda-lock --mamba --channel conda-forge --channel minrk --platform linux-64 -f environment.yml 
+
+dive:
+	dive $(IMAGE)
 
 push:
 	docker push $(IMAGE)
