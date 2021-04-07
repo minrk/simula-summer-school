@@ -48,7 +48,7 @@ conda-rsync:
 	rsync -av --delete -e 'docker-machine ssh sss-builder' conda-recipes/ :$(PWD)/conda-recipes/
 
 conda/%: conda
-	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes conda-pkgs build-conda /conda-recipes/$*
+	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*
 
 run:
 	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook --ip=0.0.0.0

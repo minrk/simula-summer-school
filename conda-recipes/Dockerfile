@@ -2,8 +2,9 @@
 # FROM jupyter/scipy-notebook:${BASE_TAG}
 from condaforge/mambaforge:4.9.2-5
 # USER root
-RUN apt-get -y update && apt-get -y install rsync patch git make
-RUN mamba install -yq conda-build anaconda-client
+# gengetopt should be build dep for opencarp, but it's not packaged on conda yet
+RUN apt-get -y update && apt-get -y install rsync patch git make gengetopt
+RUN mamba install -yq conda-build anaconda-client boa
 RUN conda config --append channels minrk
 RUN mamba install -y conda-forge-pinning
 COPY build-conda /usr/local/bin/build-conda
