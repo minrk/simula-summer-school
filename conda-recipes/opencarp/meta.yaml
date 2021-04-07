@@ -1,6 +1,6 @@
 {% set name = "opencarp" %}
 {% set version = "5.0" %}
-{% set build = 0 %}
+{% set build = 1 %}
 
 package:
   name: {{ name | lower }}
@@ -34,6 +34,9 @@ requirements:
     - python 3.8
   host:
     - petsc 3.14
+    # pin suitesparse (not a direct dependency)
+    # due to pinning changes since the last 3.14 build of slepc
+    - suitesparse 5.6
     - mpich
     - zlib
     - liblapack

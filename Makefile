@@ -4,13 +4,13 @@ GKE_PROJECT=simula-summer-school-202212
 GKE_ZONE=europe-west1
 NS=jupyterhub
 
-.PHONY: image push conda-rsync terraform kube-creds
+.PHONY: image push conda-rsync conda-fetch terraform kube-creds
 
 image: $(wildcard image/*)
 	docker build -t $(IMAGE) image
 
 image/conda-linux-64.lock: image/environment.yml
-	cd image; conda-lock --platform linux-64 -f environment.yml 
+	cd image; conda-lock --mamba --channel conda-forge --channel minrk --platform linux-64 -f environment.yml 
 
 push:
 	docker push $(IMAGE)
@@ -46,6 +46,9 @@ conda:
 
 conda-rsync:
 	rsync -av --delete -e 'docker-machine ssh sss-builder' conda-recipes/ :$(PWD)/conda-recipes/
+
+conda-fetch:
+	rsync -av --delete -e 'docker-machine ssh sss-builder' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
 
 conda/%: conda
 	docker run --rm -it -e CPU_COUNT=4 -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*
