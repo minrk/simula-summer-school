@@ -1,4 +1,4 @@
 set -ex
 
-cd thrombin-example
+cd browndye2/examples/thrombin
 make all
