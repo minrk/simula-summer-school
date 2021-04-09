@@ -22,7 +22,7 @@ dependencies:
   
   # basic Python
   - python=3.8
-  - matplotlib
+  - matplotlib-base
   - cython
   - scipy
   - numba
