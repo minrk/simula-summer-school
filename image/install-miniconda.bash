@@ -10,12 +10,13 @@ echo "installing root env:"
 time /tmp/bin/micromamba create -p ${CONDA_DIR} -f /tmp/conda.lock
 
 # clear out temporary files
-rm -rf /tmp/conda /tmp/bin
+rm -rf /tmp/bin
 
 source $CONDA_DIR/etc/profile.d/conda.sh
 conda list
 
 # Clean things out!
-conda clean -pity
+# don't clean when using mount cache
+# conda clean -pity
 
 chown -R $NB_USER ${CONDA_DIR}

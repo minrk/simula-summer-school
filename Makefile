@@ -7,7 +7,7 @@ NS=jupyterhub
 .PHONY: image push conda-rsync conda-fetch terraform kube-creds
 
 image: $(wildcard image/*)
-	docker build -t $(IMAGE) image
+	docker buildx build --load -t $(IMAGE) image
 
 image/conda-linux-64.lock: image/environment.yml
 	cd image; conda-lock --mamba --channel conda-forge --channel minrk --platform linux-64 -f environment.yml 
@@ -29,6 +29,7 @@ builder-new:
 
 builder-start:
 	docker-machine start sss-builder
+	docker-machine regenerate-certs -f sss-builder
 
 builder-env:
 	@docker-machine env sss-builder

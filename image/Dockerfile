@@ -3,10 +3,10 @@ FROM ubuntu:20.04
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 COPY apt.txt /tmp/apt.txt
-RUN apt-get update && apt-get -yq dist-upgrade \
+RUN rm -vf /etc/apt/apt.conf.d/docker-clean
+RUN --mount=type=cache,target=/var/cache/apt apt-get update && apt-get -yq dist-upgrade \
  && apt-get install -yq --no-install-recommends \
     $(cat /tmp/apt.txt | grep -v '^#' | sort) \
- && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
@@ -24,7 +24,7 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
 ENV PATH=$CONDA_DIR/bin:$PATH
 COPY conda-linux-64.lock /tmp/conda.lock
 COPY install-miniconda.bash /tmp/install-miniconda.bash
-RUN bash /tmp/install-miniconda.bash
+RUN --mount=type=cache,target=/tmp/conda bash /tmp/install-miniconda.bash
 COPY condarc $CONDA_DIR/.condarc
 
 # ensure libstdc++ comes from libstdcxx, not gcc 4.8
