@@ -21,7 +21,7 @@ def pull_repo(repo_url):
 
 
 def pull_everything():
-    r = requests.get('https://raw.githubusercontent.com/minrk/simula-summer-school/2019/repos.txt')
+    r = requests.get('https://raw.githubusercontent.com/minrk/simula-summer-school/2021/repos.txt')
     r.raise_for_status()
     for line in r.text.splitlines():
         line = line.strip()
@@ -46,16 +46,16 @@ from tornado.gen import coroutine
 class PullEverythingHandler(IPythonHandler):
 
     @property
-    def pull_pool(self):
+    def executor(self):
         if 'pull_pool' not in self.settings:
             self.settings['pull_pool'] = ThreadPoolExecutor(1)
         return self.settings['pull_pool']
 
     @authenticated
-    @coroutine
-    def post(self):
+    @run_on_executor
+    async def post(self):
         self.log.info("Updating all repos")
-        yield self.pull_pool.submit(pull_everything)
+        pull_everything()
         self.log.info("Updated all repos")
 
 
@@ -69,4 +69,3 @@ def setup_handlers(web_app):
 def load_jupyter_server_extension(nbapp):
     setup_handlers(nbapp.web_app)
     ThreadPoolExecutor(1).submit(pull_everything)
-

@@ -3,7 +3,7 @@ channels:
   - defaults
   - minrk
 dependencies:
-  # basics, since htis is starting from micromamba
+  # basics, since this is starting from micromamba
   - mamba
   - conda
   # scientific packages
@@ -30,6 +30,7 @@ dependencies:
   - pandas
   - altair
   - scikit-learn
+  - pytorch
 
   # IPython/Jupyter
   - nodejs=14
@@ -39,4 +40,4 @@ dependencies:
   - notebook
   - ipykernel
   - ipywidgets
-  - octave_kernel
+  - nbgitpuller
