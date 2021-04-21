@@ -41,9 +41,13 @@ kube-creds:
 	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_ZONE) $(KUBE_CTX)
 	kubectx sss=.
 
-upgrade:
+HELM_ARGS := hub --namespace=$(NS) --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml
+helm-diff:
+	helm diff upgrade $(HELM_ARGS)
+
+helm-upgrade:
 	helm dep up ./jupyterhub
-	helm upgrade --install --namespace=$(NS) hub --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml --cleanup-on-fail
+	helm upgrade --install --cleanup-on-fail $(HELM_ARGS)
 
 conda:
 	docker build -t conda-pkgs conda-recipes
