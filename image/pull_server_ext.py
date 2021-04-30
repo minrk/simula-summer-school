@@ -2,14 +2,34 @@
 A severely stripped-down version of data-8/nbpuller
 """
 
-import requests
-from tornado.log import app_log
+from concurrent.futures import ThreadPoolExecutor
+from functools import lru_cache
+from subprocess import check_output
 
+import requests
+from jupyter_server.base.handlers import JupyterHandler
+from jupyter_server.utils import url_path_join
 from nbgitpuller.pull import GitPuller
+from tornado.concurrent import run_on_executor
+from tornado.log import app_log
+from tornado.web import authenticated
+
+
+@lru_cache
+def pull_thread():
+    return ThreadPoolExecutor(1)
+
 
 def pull_repo(repo_url):
-
-    branch_name = 'master'
+    # discover default branch with git ls-remote
+    out = check_output(["git", "ls-remote", "--symref", repo_url])
+    for line in out.decode("utf8", "replace").splitlines():
+        parts = line.strip().split()
+        if parts and parts[0] == "ref:" and parts[-1] == "HEAD":
+            branch_name = parts[1].split("/", 2)[-1]
+            break
+    else:
+        branch_name = 'main'
     repo_dir = repo_url.rsplit('/', 1)[-1]
     if repo_dir.endswith('.git'):
         repo_dir = repo_dir[:-4]
@@ -36,20 +56,11 @@ def pull_everything():
             app_log.exception("Failed to pull repo %s", repo_url)
 
 
-from concurrent.futures import ThreadPoolExecutor
-
-from notebook.utils import url_path_join
-from notebook.base.handlers import IPythonHandler
-from tornado.web import authenticated
-from tornado.gen import coroutine
-
-class PullEverythingHandler(IPythonHandler):
+class PullEverythingHandler(JupyterHandler):
 
     @property
     def executor(self):
-        if 'pull_pool' not in self.settings:
-            self.settings['pull_pool'] = ThreadPoolExecutor(1)
-        return self.settings['pull_pool']
+        return pull_thread()
 
     @authenticated
     @run_on_executor
@@ -68,4 +79,4 @@ def setup_handlers(web_app):
 
 def load_jupyter_server_extension(nbapp):
     setup_handlers(nbapp.web_app)
-    ThreadPoolExecutor(1).submit(pull_everything)
+    pull_thread().submit(pull_everything)
