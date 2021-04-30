@@ -33,7 +33,8 @@ for d in "share/apbs/examples" \
 done
 
 # remove most static libs, but not everywhere
-find "${CONDA_DIR}" -name '*.a' -exec rm -vf {} \;
+rm -vf "${CONDA_DIR}/lib/*.a"
+# find "${CONDA_DIR}" -name '*.a' -exec rm -vf {} \;
 
 # strip boost headers
 rm -rf ${CONDA_DIR}/include/boost
