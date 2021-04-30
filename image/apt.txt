@@ -1,4 +1,5 @@
-build-essential
+# build-essential
+binutils
 bzip2
 ca-certificates
 emacs
