@@ -1,5 +1,5 @@
 # platform: linux-64
-# env_hash: 92fe795b9c5fbac9147392277a59870511c350c94b8bc1f2f076004cb9372e7e
+# env_hash: 863b1589fa968868ee06a58a1bf0c8eeacfb7bc3ae44720f9f69af8a154e62fa
 @EXPLICIT
 https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2#d7c89558ba9fa0495403155b64376d81
 https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2020.12.5-ha878542_0.tar.bz2#7eb5d4ffeee663caa1635cd67071bc1b
@@ -197,6 +197,7 @@ https://conda.anaconda.org/conda-forge/linux-64/tomlkit-0.7.0-py38h578d9bd_3.tar
 https://conda.anaconda.org/conda-forge/linux-64/tornado-6.1-py38h497a2fe_1.tar.bz2#e772c8383768280af283e814e2126663
 https://conda.anaconda.org/conda-forge/noarch/traitlets-5.0.5-py_0.tar.bz2#99618ee9ab1323e40f231acdab92fe60
 https://conda.anaconda.org/conda-forge/linux-64/typed-ast-1.4.3-py38h497a2fe_0.tar.bz2#f4a5eeaccf5c5bab10491071ea2e32b1
+https://conda.anaconda.org/conda-forge/linux-64/wurlitzer-2.1.0-py38h578d9bd_0.tar.bz2#4095c1597262f39b101178dcbd0dec3d
 https://conda.anaconda.org/conda-forge/linux-64/anyio-2.2.0-py38h578d9bd_0.tar.bz2#8c1552d357e82fb15ec7e017e7f74cc7
 https://conda.anaconda.org/conda-forge/linux-64/argon2-cffi-20.1.0-py38h497a2fe_2.tar.bz2#254bc9d931e9891ce1068eb0335700c1
 https://conda.anaconda.org/conda-forge/noarch/black-21.4b2-pyhd8ed1ab_0.tar.bz2#4f2d99eb5db5311952a043bf646c199f

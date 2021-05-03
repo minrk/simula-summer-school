@@ -35,6 +35,7 @@ dependencies:
   - scikit-learn
   - pytorch
   - pytest
+  - wurlitzer
 
   # IPython/Jupyter
   # - nodejs=14
