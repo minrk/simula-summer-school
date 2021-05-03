@@ -4,13 +4,17 @@ IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2021
 GKE_ZONE=europe-west1
 NS=jupyterhub
 
-.PHONY: image push conda-rsync conda-fetch terraform kube-creds
+.PHONY: image image-test push conda-rsync conda-fetch terraform kube-creds
 
 image: $(wildcard image/*)
 	docker buildx build --load -t $(IMAGE) image
 
 image/conda-linux-64.lock: image/environment.yml
-	cd image; conda-lock --mamba --channel conda-forge --channel minrk --platform linux-64 -f environment.yml 
+	cd image; conda-lock --mamba --channel conda-forge --channel minrk --platform linux-64 -f environment.yml
+
+image-test:
+	docker buildx build --load -t image-test --build-arg IMAGE=$(IMAGE) image-test
+	docker run --rm -it image-test pytest -v $(ARG)
 
 dive:
 	dive $(IMAGE)
@@ -65,7 +69,7 @@ conda-upload/%:
 	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld conda-pkgs sh -c 'anaconda upload /io/conda-bld/linux-64/$*-*.tar.bz2'
 
 run:
-	docker run -it --rm -p9999:8888 $(IMAGE) jupyter notebook --ip=0.0.0.0
+	docker run -it --rm -p9999:8888 $(IMAGE) $(ARG)
 
 pull:
 	- $(foreach instance, \

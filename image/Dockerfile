@@ -64,8 +64,8 @@ USER $NB_UID
 
 COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.8/site-packages/pull_server_ext.py
 COPY pull-button.js /tmp/
-RUN jupyter serverextension enable --sys-prefix pull_server_ext && \
-    jupyter serverextension enable --sys-prefix nbdime && \
+RUN jupyter server extension enable --sys-prefix pull_server_ext && \
+    jupyter server extension enable --sys-prefix nbdime && \
     jupyter nbextension     install --sys-prefix /tmp/pull-button.js && \
     jupyter nbextension     enable --sys-prefix --section=tree pull-button
     # jupyter serverextension enable  --py --sys-prefix nbnovnc && \
