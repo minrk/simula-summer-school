@@ -6,7 +6,7 @@ dependencies:
   # basics, since this is starting from micromamba
   - mamba
   - conda
-  
+
   # scientific packages
   - fenics=2019.1.0
   - mshr=2019.1.0
@@ -14,13 +14,13 @@ dependencies:
   - neuron
   - lfpy
   - python-neo
-  
+
   # packaged in this repo:
   - browndye
   - opencarp
   # TODO:
   # - carputils?
-  
+
   # basic Python
   - python=3.8
   - black
@@ -34,6 +34,7 @@ dependencies:
   - altair
   - scikit-learn
   - pytorch
+  - pytest
 
   # IPython/Jupyter
   # - nodejs=14
