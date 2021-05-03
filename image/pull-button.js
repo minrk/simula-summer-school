@@ -1,11 +1,11 @@
 define(function () {
-  var $ = require('jquery');
-  var utils = require('base/js/utils');
-  var events = require('base/js/events');
+  var $ = require("jquery");
+  var utils = require("base/js/utils");
+  var events = require("base/js/events");
   var baseUrl = utils.get_body_data("baseUrl");
 
   function updateAll() {
-    var url = utils.url_path_join(baseUrl, 'api/pull-repos');
+    var url = utils.url_path_join(baseUrl, "api/pull-repos");
     utils.ajax(url, {
       processData: false,
       cache: false,
@@ -15,7 +15,7 @@ define(function () {
       },
       error: function () {
         console.error("Failed to update repos");
-      }
+      },
     });
   }
 
@@ -27,17 +27,14 @@ define(function () {
     if ($("#pull-repos").length === 0) {
       $(".tree-buttons > .pull-right").append(
         $("<div>")
-        .addClass("btn-group")
-        .append(
-          $("<button>")
-          .addClass('btn btn-default btn-xs')
-          .click(updateAll)
-          .attr('title', 'Update repos')
+          .addClass("btn-group")
           .append(
-            $('<i>')
-            .addClass('fa fa-download')
+            $("<button>")
+              .addClass("btn btn-default btn-xs")
+              .click(updateAll)
+              .attr("title", "Update repos")
+              .append($("<i>").addClass("fa fa-download"))
           )
-        )
       );
     }
   }
@@ -47,7 +44,6 @@ define(function () {
   }
 
   return {
-    load_ipython_extension : load_ipython_extension,
+    load_ipython_extension: load_ipython_extension,
   };
-
 });

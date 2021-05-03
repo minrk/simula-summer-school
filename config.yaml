@@ -17,7 +17,7 @@ jupyterhub:
     tls:
       - secretName: kubelego-tls-jupyterhub
         hosts:
-        - simula.minrk.net
+          - simula.minrk.net
 
   singleuser:
     cmd: jupyter-labhub
@@ -26,7 +26,7 @@ jupyterhub:
       homeMountPath: /home/user
     image:
       name: gcr.io/simula-summer-school-202212/simula-summer-school
-      tag: '2021'
+      tag: "2021"
       pullPolicy: Always
     memory:
       limit: 2G
@@ -36,10 +36,10 @@ jupyterhub:
       guarantee: 0.5
     schedulerStrategy: pack
     extraEnv:
-      CULL_CONNECTED: '1'
-      CULL_TIMEOUT: '1800'
-      CULL_KERNEL_TIMEOUT: '1800'
-      CULL_INTERVAL: '120'
+      CULL_CONNECTED: "1"
+      CULL_TIMEOUT: "1800"
+      CULL_KERNEL_TIMEOUT: "1800"
+      CULL_INTERVAL: "120"
 
   prePuller:
     continuous:
@@ -54,7 +54,7 @@ jupyterhub:
       JupyterHub:
         authenticate_prometheus: false
         admin_access: true
-        
+
   scheduling:
     userScheduler:
       enabled: true

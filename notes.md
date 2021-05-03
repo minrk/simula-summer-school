@@ -21,7 +21,6 @@ Upgrade:
 
     helm upgrade hub ./helm-chart/jupyterhub -f config.yaml -f secrets.yaml
 
-
 build image:
 
     eval $(docker-machine env builder)
@@ -32,4 +31,3 @@ cleanup completed jobs:
 
     kubectl delete job $(kubectl get jobs --all-namespaces | sed '1d' | awk '{print $2}')
     kubectl delete pod $(kubectl get pod -a | grep Completed | awk '{print $1}')
-

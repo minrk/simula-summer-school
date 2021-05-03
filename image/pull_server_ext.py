@@ -1,7 +1,6 @@
 """
 A severely stripped-down version of data-8/nbpuller
 """
-
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from subprocess import check_output
@@ -29,23 +28,25 @@ def pull_repo(repo_url):
             branch_name = parts[1].split("/", 2)[-1]
             break
     else:
-        branch_name = 'main'
-    repo_dir = repo_url.rsplit('/', 1)[-1]
-    if repo_dir.endswith('.git'):
+        branch_name = "main"
+    repo_dir = repo_url.rsplit("/", 1)[-1]
+    if repo_dir.endswith(".git"):
         repo_dir = repo_dir[:-4]
 
     app_log.info("Pulling %s", repo_url)
     gp = GitPuller(repo_url, branch_name, repo_dir)
     for line in gp.pull():
-        app_log.info(line.rstrip('\n'))
+        app_log.info(line.rstrip("\n"))
 
 
 def pull_everything():
-    r = requests.get('https://raw.githubusercontent.com/minrk/simula-summer-school/2021/repos.txt')
+    r = requests.get(
+        "https://raw.githubusercontent.com/minrk/simula-summer-school/2021/repos.txt"
+    )
     r.raise_for_status()
     for line in r.text.splitlines():
         line = line.strip()
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         if not line:
             continue
@@ -57,7 +58,6 @@ def pull_everything():
 
 
 class PullEverythingHandler(JupyterHandler):
-
     @property
     def executor(self):
         return pull_thread()
@@ -71,10 +71,13 @@ class PullEverythingHandler(JupyterHandler):
 
 
 def setup_handlers(web_app):
-    base_url = web_app.settings.get('base_url', '/')
-    web_app.add_handlers('.*', [
-        (url_path_join(base_url, 'api/pull-repos'), PullEverythingHandler),
-    ])
+    base_url = web_app.settings.get("base_url", "/")
+    web_app.add_handlers(
+        ".*",
+        [
+            (url_path_join(base_url, "api/pull-repos"), PullEverythingHandler),
+        ],
+    )
 
 
 def load_jupyter_server_extension(nbapp):

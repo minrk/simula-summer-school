@@ -6,7 +6,7 @@ cd browndye2
 export CC=$CXX
 export CFLAGS=$CXXFLAGS
 
-make -j${CPU_COUNT:-1} all
+make -j"${CPU_COUNT:-1}" all
 
-test -d ${PREFIX}/bin || mkdir -p ${PREFIX}/bin
-cp bin/* ${PREFIX}/bin/
+test -d "${PREFIX}"/bin || mkdir -p "${PREFIX}"/bin
+cp bin/* "${PREFIX}"/bin/
