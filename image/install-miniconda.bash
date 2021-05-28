@@ -37,7 +37,9 @@ rm -vf "${CONDA_DIR}/lib/*.a"
 # find "${CONDA_DIR}" -name '*.a' -exec rm -vf {} \;
 
 # strip boost headers
-rm -rf "${CONDA_DIR}"/include/boost
+# this is 100MB of just headers (?!)
+# but at least some seem to be needed
+# rm -rf "${CONDA_DIR}"/include/boost
 
 # strip some mkl (more?)
 rm -vf "${CONDA_DIR}"/lib/libmkl_avx.*
