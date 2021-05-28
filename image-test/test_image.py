@@ -3,6 +3,13 @@ import os
 import pytest
 
 
+@pytest.fixture(scope="session")
+def needs_puller():
+    """Some tests need the puller to have run"""
+    if not os.path.exists("SSCP_2021_lectures"):
+        test_puller()
+
+
 def test_puller_ext():
     from jupyter_core.paths import jupyter_config_path
     from jupyter_server.extension.manager import ExtensionManager
@@ -47,10 +54,11 @@ def test_neuron():
 @pytest.mark.parametrize(
     "notebook",
     [
+        "SSCP_2021_lectures/L15 (FEniCS Mechanics)/L13_solved.ipynb",
         "SSCP_2021_lectures/Stream 3 (Neural Electrophysiology)/Exercise_20C_NEURON_RxD/NEURON_RxD_exercise2.ipynb",
     ],
 )
-def test_notebook(notebook):
+def test_notebook(notebook, needs_puller):
     import nbformat
     from nbconvert.preprocessors import ExecutePreprocessor
 

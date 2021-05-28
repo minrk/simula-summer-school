@@ -14,7 +14,7 @@ image/conda-linux-64.lock: image/environment.yml
 
 image-test:
 	docker buildx build --load -t image-test --build-arg IMAGE=$(IMAGE) image-test
-	docker run --rm -it image-test pytest -v $(ARG)
+	docker run --rm -it image-test pytest -vs $(ARG)
 
 dive:
 	dive $(IMAGE)
