@@ -3,20 +3,13 @@ import os
 import pytest
 
 
-def test_0_puller():
-    import pull_server_ext
-
-    pull_server_ext.pull_everything()
-    assert os.path.exists("SSCP_2021_lectures")
-
-
 def test_puller_ext():
     from jupyter_core.paths import jupyter_config_path
     from jupyter_server.extension.manager import ExtensionManager
     from jupyter_server.extension.config import ExtensionConfigManager
 
     m = ExtensionManager(
-        config_manager=ExtensionConfigManager(read_config_paths=jupyter_config_path())
+        config_manager=ExtensionConfigManager(read_config_path=jupyter_config_path())
     )
     for name, ext in m.extensions.items():
         print(f"Validating extension {name}")
@@ -26,6 +19,17 @@ def test_puller_ext():
             assert extension_point.validate() in {None, True}
         ext.validate()
     assert "pull_server_ext" in m.extensions
+
+
+def test_puller():
+    import pull_server_ext
+
+    pull_server_ext.pull_everything()
+    assert os.path.exists("SSCP_2021_lectures")
+
+
+def test_torch():
+    import torch
 
 
 def test_dolfin():

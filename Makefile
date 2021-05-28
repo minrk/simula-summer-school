@@ -22,12 +22,16 @@ dive:
 push:
 	docker push $(IMAGE)
 
+# list images
+# gcloud compute images list --filter=name=ubuntu
+
 builder-new:
 	docker-machine create sss-builder \
 	    --driver=google \
-	    --google-project=jupyter-simula \
+	    --google-project=$(GKE_PROJECT) \
 	    --google-preemptible \
 	    --google-disk-size=100 \
+	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2004-focal-v20210429 \
 	    --google-machine-type=n1-standard-4 \
 	    --google-zone=europe-west1-b
 

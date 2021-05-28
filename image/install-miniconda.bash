@@ -43,7 +43,6 @@ rm -rf "${CONDA_DIR}"/include/boost
 rm -vf "${CONDA_DIR}"/lib/libmkl_avx.*
 rm -vf "${CONDA_DIR}"/lib/libmkl_avx512*
 rm -vf "${CONDA_DIR}"/lib/libmkl_blacs*
-rm -vf "${CONDA_DIR}"/lib/libmkl_gnu*
 rm -vf "${CONDA_DIR}"/lib/libmkl_mc*
 rm -vf "${CONDA_DIR}"/lib/libmkl_pgi*
 rm -vf "${CONDA_DIR}"/lib/libmkl_scalapack*

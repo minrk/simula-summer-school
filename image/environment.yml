@@ -28,6 +28,7 @@ dependencies:
   - matplotlib-base
   - cython
   - scipy
+  - seaborn
   - numba
   - numpy
   - pandas
