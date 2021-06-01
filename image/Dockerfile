@@ -93,3 +93,10 @@ ADD entrypoint.sh /usr/local/bin/docker-entrypoint
 USER $NB_UID
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint"]
 CMD ["jupyter", "lab", "--ip=0.0.0.0"]
+
+
+# late, small changes, to avoid large image rebuilds
+# move to environment.yml on next large update
+
+# jupyter-server-mathjax 0.2.2 unconditionally sets the wrong mathjax_url
+RUN pip install --no-cache jupyter-server-mathjax==0.2.0
