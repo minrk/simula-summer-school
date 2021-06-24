@@ -29,10 +29,10 @@ jupyterhub:
       tag: "2021"
       pullPolicy: Always
     memory:
-      limit: 2G
-      guarantee: 1G
+      limit: 3G
+      guarantee: 2G
     cpu:
-      limit: 2
+      limit: 1
       guarantee: 0.5
     schedulerStrategy: pack
     extraEnv:
@@ -62,10 +62,10 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 3
+      replicas: 6
     userPods:
       nodeAffinity:
-        matchNodePurpose: prefer
+        matchNodePurpose: require
     corePods:
       nodeAffinity:
         matchNodePurpose: require
@@ -119,6 +119,9 @@ prometheus:
   rbac:
     create: true
   server:
+    nodeSelector: *coreNodeSelector
+    podLabels:
+      hub.jupyter.org/network-access-hub: "true"
     ingress:
       enabled: true
       annotations:
@@ -138,8 +141,7 @@ kube-lego:
   rbac:
     create: true
 
-nginx-ingress:
-  nodeSelector: *coreNodeSelector
+ingress-nginx:
   rbac:
     create: true
   statsExporter:
@@ -147,11 +149,12 @@ nginx-ingress:
       annotations:
         prometheus.io/scrape: "true"
   controller:
+    nodeSelector: *coreNodeSelector
     replicaCount: 2
     scope:
       enabled: true
     config:
-      # Allow POSTs of upto 64MB, for large notebook support.
+      # Allow POSTs of up to 64MB, for large notebook support.
       proxy-body-size: 64m
     stats:
       enabled: true
