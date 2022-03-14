@@ -22,7 +22,7 @@ dependencies:
   # - carputils?
 
   # basic Python
-  - python=3.8
+  - python=3.9
   - black
   - isort
   - matplotlib-base
@@ -41,7 +41,7 @@ dependencies:
   # IPython/Jupyter
   # - nodejs=14
   - jupyterlab
-  - jupyterhub-base=1.3.0
+  - jupyterhub-base=2.2.2
   - jupyterlab_code_formatter
   - jupyterlab-git
   - nbdime
