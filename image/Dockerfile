@@ -62,7 +62,7 @@ USER $NB_UID
 # fenics 3d plotting doesn't like mpl 3
 # RUN pip install --no-cache 'matplotlib<3'
 
-COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.8/site-packages/pull_server_ext.py
+COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.9/site-packages/pull_server_ext.py
 COPY pull-button.js /tmp/
 RUN jupyter server extension enable --sys-prefix pull_server_ext && \
     jupyter server extension enable --sys-prefix nbdime && \
@@ -99,4 +99,4 @@ CMD ["jupyter", "lab", "--ip=0.0.0.0"]
 # move to environment.yml on next large update
 
 # jupyter-server-mathjax 0.2.2 unconditionally sets the wrong mathjax_url
-RUN pip install --no-cache jupyter-server-mathjax==0.2.0
+# RUN pip install --no-cache jupyter-server-mathjax==0.2.0

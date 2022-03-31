@@ -16,8 +16,8 @@ dependencies:
   - python-neo
 
   # packaged in this repo:
-  - browndye
-  - opencarp
+  - browndye=2022.3
+  - opencarp=9
   # TODO:
   # - carputils?
 

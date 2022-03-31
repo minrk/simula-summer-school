@@ -2,11 +2,13 @@ import os
 
 import pytest
 
+lectures_dir = "SSCP_2022_lectures"
+
 
 @pytest.fixture(scope="session")
 def needs_puller():
     """Some tests need the puller to have run"""
-    if not os.path.exists("SSCP_2021_lectures"):
+    if not os.path.exists(lectures_dir):
         test_puller()
 
 
@@ -32,7 +34,7 @@ def test_puller():
     import pull_server_ext
 
     pull_server_ext.pull_everything()
-    assert os.path.exists("SSCP_2021_lectures")
+    assert os.path.exists(lectures_dir)
 
 
 def test_torch():
@@ -54,8 +56,8 @@ def test_neuron():
 @pytest.mark.parametrize(
     "notebook",
     [
-        "SSCP_2021_lectures/L15 (FEniCS Mechanics)/L13_solved.ipynb",
-        "SSCP_2021_lectures/Stream 3 (Neural Electrophysiology)/Exercise_20C_NEURON_RxD/NEURON_RxD_exercise2.ipynb",
+        f"{lectures_dir}/L15 (FEniCS Mechanics)/L13_solved.ipynb",
+        f"{lectures_dir}/Stream 3 (Neural Electrophysiology)/Exercise_20C_NEURON_RxD/NEURON_RxD_exercise2.ipynb",
     ],
 )
 def test_notebook(notebook, needs_puller):

@@ -34,14 +34,14 @@ def pull_repo(repo_url):
         repo_dir = repo_dir[:-4]
 
     app_log.info("Pulling %s", repo_url)
-    gp = GitPuller(repo_url, branch_name, repo_dir)
+    gp = GitPuller(repo_url, repo_dir, branch=branch_name)
     for line in gp.pull():
         app_log.info(line.rstrip("\n"))
 
 
 def pull_everything():
     r = requests.get(
-        "https://raw.githubusercontent.com/minrk/simula-summer-school/2021/repos.txt"
+        "https://raw.githubusercontent.com/minrk/simula-summer-school/2022/repos.txt"
     )
     r.raise_for_status()
     for line in r.text.splitlines():
