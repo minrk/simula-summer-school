@@ -8,5 +8,6 @@ jupyterhub/requirements.lock
 # home files
 .*
 conda-bld
+!.pre-commit*
 
 *.tfstate*
