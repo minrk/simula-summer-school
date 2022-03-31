@@ -12,8 +12,8 @@ def needs_puller():
 
 def test_puller_ext():
     from jupyter_core.paths import jupyter_config_path
-    from jupyter_server.extension.manager import ExtensionManager
     from jupyter_server.extension.config import ExtensionConfigManager
+    from jupyter_server.extension.manager import ExtensionManager
 
     m = ExtensionManager(
         config_manager=ExtensionConfigManager(read_config_path=jupyter_config_path())
@@ -40,7 +40,7 @@ def test_torch():
 
 
 def test_dolfin():
-    from dolfin import UnitIntervalMesh, FiniteElement, FunctionSpace, interval
+    from dolfin import FiniteElement, FunctionSpace, UnitIntervalMesh, interval
 
     mesh = UnitIntervalMesh(20)
     elem = FiniteElement("CG", interval, 1)
