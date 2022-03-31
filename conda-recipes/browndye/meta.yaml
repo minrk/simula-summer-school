@@ -1,6 +1,6 @@
 {% set name = 'browndye' %}
-{% set version = "2021.2.20" %}
-{% set tag = "20-Feb-21" %}
+{% set version = "2022.3.7" %}
+{% set tag = "07-Mar-2022" %}
 {% set build = 0 %}
 
 package:
@@ -10,7 +10,7 @@ package:
 source:
   fn: {{ name }}.tar.gz
   url: https://bitbucket.org/gahuber95/browndye2/get/{{ tag }}.tar.gz
-  sha256: 78d18ea4146de8d940bff754deacc8a41c6ebc49355f58f10d8caa3f01a25011
+  sha256: 1a985a455ef691ce10b425aa7cec25acf0718787c7d22877a02db3d087e12f08
   patches:
     - makefile-env.patch
     - ldflags.patch

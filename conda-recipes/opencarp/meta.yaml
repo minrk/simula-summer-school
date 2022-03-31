@@ -1,6 +1,6 @@
 {% set name = "opencarp" %}
-{% set version = "5.0" %}
-{% set build = 1 %}
+{% set version = "9.0" %}
+{% set build = 0 %}
 
 package:
   name: {{ name | lower }}
@@ -11,8 +11,8 @@ source:
   # not the published source distributions
   git_url: https://git.opencarp.org/openCARP/openCARP
   git_ref: v{{ version }}
-  # url: https://git.opencarp.org/openCARP/openCARP/-/archive/v{{ version }}/openCARP-v{{ version }}.tar.bz2
-  # sha256: 0f13153f818f2d554d43e5ce810c6588934a9005dd9c3c24216eda65551b5c93
+  # url: https://git.opencarp.org/api/v4/projects/16/packages/generic/openCARP-inclSubmodules/v{{ version }}/openCARP-v{{ version }}-inclSubmodules.zip
+  # sha256: 8c43bbc4e18a7de16271626339a6edd60d38fa8d467c0724d71c9f5c45b71527
   patches:
     - cpp-env.patch
 
@@ -29,14 +29,11 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - make
-    # - gengetopt not packaged yet, from apt for now
+    # # - gengetopt not packaged yet, from apt for now
     - pkg-config
-    - python 3.8
+    - python 3.9
   host:
-    - petsc 3.14
-    # pin suitesparse (not a direct dependency)
-    # due to pinning changes since the last 3.14 build of slepc
-    - suitesparse 5.6
+    - petsc 3.16
     - mpich
     - zlib
     - liblapack
