@@ -5,26 +5,26 @@ name: jupyterhub-simula
 dependencies:
   # Ingress-Nginx to route network traffic according to Ingress resources using
   # this controller from within k8s.
-  # Source code:   https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx
-  # App changelog: https://github.com/kubernetes/ingress-nginx/blob/master/Changelog.md
+  # Source code:   https://github.com/kubernetes/ingress-nginx/tree/HEAD/charts/ingress-nginx
+  # App changelog: https://github.com/kubernetes/ingress-nginx/blob/HEAD/Changelog.md
   - name: ingress-nginx
-    version: 3.26.0
+    version: 4.0.18
     repository: https://kubernetes.github.io/ingress-nginx
 
   # Prometheus for collection of metrics.
-  # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
-  # App changelog: https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md
+  # Source code:   https://github.com/prometheus-community/helm-charts/tree/HEAD/charts/prometheus
+  # App changelog: https://github.com/prometheus/prometheus/blob/HEAD/CHANGELOG.md
   - name: prometheus
-    version: 13.6.0
+    version: 15.8.0
     repository: https://prometheus-community.github.io/helm-charts
 
   # Grafana for dashboarding of metrics.
-  # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
-  # App changelog: https://github.com/grafana/grafana/blob/master/CHANGELOG.md
+  # Source code:   https://github.com/grafana/helm-charts/tree/HEAD/charts/grafana
+  # App changelog: https://github.com/grafana/grafana/blob/HEAD/CHANGELOG.md
   - name: grafana
-    version: 6.7.2
+    version: 6.24.1
     repository: https://grafana.github.io/helm-charts
 
   - name: jupyterhub
-    version: 0.11.1-n361.h166e2157
+    version: 1.1.3-n410.hd8ae7348
     repository: https://jupyterhub.github.io/helm-chart

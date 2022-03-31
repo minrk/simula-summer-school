@@ -3,7 +3,8 @@ coreNodeSelector: &coreNodeSelector
 
 jupyterhub:
   proxy:
-    nodeSelector: *coreNodeSelector
+    chp:
+      nodeSelector: *coreNodeSelector
     service:
       type: ClusterIP
   ingress:
@@ -15,7 +16,7 @@ jupyterhub:
     hosts:
       - simula.minrk.net
     tls:
-      - secretName: kubelego-tls-jupyterhub
+      - secretName: tls-jupyterhub
         hosts:
           - simula.minrk.net
 
@@ -25,8 +26,8 @@ jupyterhub:
     storage:
       homeMountPath: /home/user
     image:
-      name: gcr.io/simula-summer-school-202212/simula-summer-school
-      tag: "2021"
+      name: gcr.io/simula-summer-school-2022/simula-summer-school
+      tag: "2022"
       pullPolicy: Always
     memory:
       limit: 3G
@@ -34,7 +35,6 @@ jupyterhub:
     cpu:
       limit: 1
       guarantee: 0.5
-    schedulerStrategy: pack
     extraEnv:
       CULL_CONNECTED: "1"
       CULL_TIMEOUT: "1800"
@@ -53,7 +53,6 @@ jupyterhub:
     config:
       JupyterHub:
         authenticate_prometheus: false
-        admin_access: true
 
   scheduling:
     userScheduler:
@@ -62,10 +61,11 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 6
+      replicas: 0
     userPods:
       nodeAffinity:
-        matchNodePurpose: require
+        # TODO: 'require' when we deploy for real
+        matchNodePurpose: ignore
     corePods:
       nodeAffinity:
         matchNodePurpose: require
@@ -89,7 +89,7 @@ grafana:
     tls:
       - hosts:
           - grafana.simula.minrk.net
-        secretName: kubelego-tls-grafana
+        secretName: tls-grafana
   persistence:
     size: 2Gi
     enabled: true
@@ -132,14 +132,7 @@ prometheus:
       tls:
         - hosts:
             - prometheus.simula.minrk.net
-          secretName: kubelego-tls-prometheus
-
-kube-lego:
-  config:
-    LEGO_EMAIL: benjaminrk@simula.no
-    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
-  rbac:
-    create: true
+          secretName: tls-prometheus
 
 ingress-nginx:
   rbac:

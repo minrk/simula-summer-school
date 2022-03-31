@@ -1,6 +1,6 @@
 KUBE_CTX=sss
-GKE_PROJECT=simula-summer-school-202212
-IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2021
+GKE_PROJECT=simula-summer-school-2022
+IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2022
 GKE_ZONE=europe-west1
 NS=jupyterhub
 
@@ -10,7 +10,7 @@ image: $(wildcard image/*)
 	docker buildx build --load -t $(IMAGE) image
 
 image/conda-linux-64.lock: image/environment.yml
-	cd image; conda-lock --mamba --channel conda-forge --channel minrk --platform linux-64 -f environment.yml
+	conda-lock lock -k explicit --mamba --channel conda-forge --channel minrk --platform linux-64 --filename-template $@ -f $<
 
 image-test:
 	docker buildx build --load -t image-test --build-arg IMAGE=$(IMAGE) image-test
@@ -34,6 +34,8 @@ builder-new:
 	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2004-focal-v20210429 \
 	    --google-machine-type=n1-standard-4 \
 	    --google-zone=europe-west1-b
+	docker-machine ssh sss-builder sudo apt-get install -y rsync
+	docker-machine ssh sss-builder sh -c 'sudo mkdir -p $(PWD) && chown docker-user $(PWD)'
 
 builder-start:
 	docker-machine start sss-builder
