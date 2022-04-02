@@ -1,6 +1,5 @@
 channels:
   - conda-forge
-  - defaults
   - minrk
 dependencies:
   # basics, since this is starting from micromamba
@@ -12,12 +11,14 @@ dependencies:
   - mshr=2019.1.0
   - sympy
   - neuron
+  # lfpy/pytorch seem to have conflicts
+  # - lfpy=2.2.5
   - lfpy
   - python-neo
+  - browndye
 
   # packaged in this repo:
-  - browndye=2022.3
-  - opencarp=9
+  - "minrk::opencarp=9"
   # TODO:
   # - carputils?
 
