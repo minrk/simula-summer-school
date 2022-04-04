@@ -21,11 +21,6 @@ locals {
 
 }
 
-# data "google_container_cluster" "cluster" {
-#   name     = local.cluster_name
-#   location = data.google_client_config.provider.region
-# }
-
 resource "google_container_cluster" "cluster" {
   name     = local.cluster_name
   location = local.location
