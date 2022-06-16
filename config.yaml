@@ -42,6 +42,8 @@ jupyterhub:
       CULL_INTERVAL: "120"
 
   prePuller:
+    hook:
+      enabled: false
     continuous:
       enabled: true
 
