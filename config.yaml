@@ -135,6 +135,10 @@ prometheus:
         - hosts:
             - prometheus.simula.minrk.net
           secretName: tls-prometheus
+  kube-state-metrics:
+    metricLabelsAllowlist:
+      - pods=[app,component]
+      - nodes=[*]
 
 ingress-nginx:
   rbac:
