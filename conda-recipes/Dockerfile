@@ -10,18 +10,3 @@ RUN mamba install -y conda-forge-pinning \
  && cp /opt/conda/conda_build_config.yaml $HOME/
 
 COPY build-conda /usr/local/bin/build-conda
-
-# COPY browndye browndye
-# RUN conda build browndye
-
-# ADD petsc4carp petsc4carp
-# RUN conda build petsc4carp
-# ADD carpentry carpentry
-# RUN conda build carpentry
-# ADD neuron neuron
-# RUN conda build neuron
-# ENV CONDA_PY 3.7
-# ADD csa csa
-# RUN conda build csa
-# ADD lfpy lfpy
-# RUN conda build lfpy
