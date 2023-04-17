@@ -42,6 +42,8 @@ jupyterhub:
       CULL_INTERVAL: "120"
 
   prePuller:
+    hook:
+      enabled: false
     continuous:
       enabled: true
 
@@ -61,11 +63,11 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 0
+      replicas: 3
     userPods:
       nodeAffinity:
         # TODO: 'require' when we deploy for real
-        matchNodePurpose: ignore
+        matchNodePurpose: require
     corePods:
       nodeAffinity:
         matchNodePurpose: require
@@ -133,6 +135,10 @@ prometheus:
         - hosts:
             - prometheus.simula.minrk.net
           secretName: tls-prometheus
+  kube-state-metrics:
+    metricLabelsAllowlist:
+      - pods=[app,component]
+      - nodes=[*]
 
 ingress-nginx:
   rbac:
