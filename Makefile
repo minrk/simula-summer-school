@@ -1,6 +1,6 @@
 KUBE_CTX=sss
-GKE_PROJECT=simula-summer-school-2022
-IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2022
+GKE_PROJECT=simula-summer-school-2023
+IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2023
 GKE_ZONE=europe-west1
 NS=jupyterhub
 
@@ -25,17 +25,24 @@ push:
 # list images
 # gcloud compute images list --filter=name=ubuntu
 
+# https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/issues/47
+# Error 404: The resource 'projects/simula-summer-school-2023/global/firewalls/docker-machines' was not found, notFound
+
+builder-firewall-rule:
+	gcloud --project=$(GKE_PROJECT) compute firewall-rules create docker-machines --allow=tcp:22
+
 builder-new:
 	docker-machine create sss-builder \
 	    --driver=google \
 	    --google-project=$(GKE_PROJECT) \
 	    --google-preemptible \
 	    --google-disk-size=100 \
-	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2004-focal-v20210429 \
+	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2204-jammy-v20230413 \
 	    --google-machine-type=n1-standard-4 \
 	    --google-zone=europe-west1-b
-	docker-machine ssh sss-builder sudo apt-get install -y rsync
-	docker-machine ssh sss-builder sh -c 'sudo mkdir -p $(PWD) && chown docker-user $(PWD)'
+	docker-machine ssh sss-builder -- sudo apt-get install -y rsync
+	docker-machine ssh sss-builder -- sudo mkdir -p $(PWD)
+	docker-machine ssh sss-builder -- sudo chown docker-user $(PWD)
 
 builder-start:
 	docker-machine start sss-builder

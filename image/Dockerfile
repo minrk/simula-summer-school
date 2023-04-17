@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 USER root
 ENV DEBIAN_FRONTEND noninteractive
@@ -31,28 +31,12 @@ COPY condarc $CONDA_DIR/.condarc
 # RUN conda install -y --force libstdcxx-ng=7.2.* \
  # && conda clean -tipsy
 
-# # install carp in its own env since it has petsc conflicts
-# RUN conda create -y -c minrk -n carp carpentry \
-#  && conda clean -tipsy
-# ENV CARP_LICENSE=${CONDA_DIR}/envs/carp/etc/carp/license.bin
-# Add CARP at the *end* of the PATH
-# ENV PATH=$PATH:${CONDA_DIR}/envs/carp/bin
-
 USER $NB_UID
 
 # install some extra things with requirements.txt
 # COPY requirements.txt /tmp/requirements.txt
 # RUN pip install --no-cache -r /tmp/requirements.txt && \
 #     mv -v $HOME/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels
-
-# RUN \
-#     # jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build && \
-#     jupyter labextension install @jupyterlab/hub-extension --no-build && \
-#     jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build && \
-#     # jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.37 --no-build && \
-#     # jupyter labextension install nbdime-jupyterlab@0.5.0 --no-build && \
-#     jupyter lab clean && jupyter lab build --dev && \
-#     jupyter lab clean
 
 # enable nbdime globally
 USER root

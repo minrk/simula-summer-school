@@ -4,7 +4,9 @@
 set -ex
 
 export MAMBA_ROOT_PREFIX=/tmp/conda
-wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/0.22.0 | tar --directory /tmp -xvj bin/micromamba
+export MAMBA_ALWAYS_YES=true
+
+wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/1.4.2 | tar --directory /tmp -xvj bin/micromamba
 
 echo "installing root env:"
 time /tmp/bin/micromamba create -p "${CONDA_DIR}" -f /tmp/conda.lock
