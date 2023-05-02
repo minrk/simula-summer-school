@@ -35,14 +35,14 @@ dependencies:
   - pandas
   - altair
   - scikit-learn
-  - pytorch
+  - pytorch-cpu
   - pytest
   - wurlitzer
 
   # IPython/Jupyter
   # - nodejs=14
   - jupyterlab
-  - jupyterhub-base=3.1.1
+  - jupyterhub-base=4.0.0
   - jupyterlab_code_formatter
   - jupyterlab-git
   - nbclassic
