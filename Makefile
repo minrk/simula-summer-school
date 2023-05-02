@@ -1,13 +1,13 @@
 KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-2023
-IMAGE=gcr.io/$(GKE_PROJECT)/simula-summer-school:2023
 GKE_ZONE=europe-west1
+IMAGE=$(GKE_ZONE)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2023
 NS=jupyterhub
 
 .PHONY: image image-test push conda-rsync conda-fetch terraform kube-creds
 
 image: $(wildcard image/*)
-	docker buildx build --load -t $(IMAGE) image
+	docker buildx build --platform linux/amd64 --load -t $(IMAGE) image
 
 image/conda-linux-64.lock: image/environment.yml
 	conda-lock lock -k explicit --mamba --channel conda-forge --channel minrk --platform linux-64 --filename-template $@ -f $<
@@ -38,27 +38,36 @@ builder-new:
 	    --google-preemptible \
 	    --google-disk-size=100 \
 	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2204-jammy-v20230413 \
-	    --google-machine-type=n1-standard-4 \
+	    --google-machine-type=e2-standard-4 \
 	    --google-zone=europe-west1-b
 	docker-machine ssh sss-builder -- sudo apt-get install -y rsync
 	docker-machine ssh sss-builder -- sudo mkdir -p $(PWD)
-	docker-machine ssh sss-builder -- sudo chown docker-user $(PWD)
+	docker-machine ssh sss-builder -- sudo chown ubuntu $(PWD)
 
 builder-start:
 	docker-machine start sss-builder
+	make builder-certs
+
+builder-certs:
 	docker-machine regenerate-certs -f sss-builder
 
 builder-env:
 	@docker-machine env sss-builder
 
+builder-rm:
+	docker-machine rm sss-builder
+
 terraform:
-	cd terraform; terraform init; terraform apply
+	cd terraform; terraform init -upgrade; terraform apply
 
 kube-creds:
 	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_ZONE) $(KUBE_CTX)
 	kubectx sss=.
+	@kubectl create namespace jupyterhub
+	kubens jupyterhub
 
 HELM_ARGS := hub --namespace=$(NS) --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml
+
 helm-diff:
 	helm diff upgrade $(HELM_ARGS)
 

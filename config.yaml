@@ -21,13 +21,12 @@ jupyterhub:
           - simula.minrk.net
 
   singleuser:
-    cmd: jupyter-labhub
     events: true
     storage:
       homeMountPath: /home/user
     image:
-      name: gcr.io/simula-summer-school-2022/simula-summer-school
-      tag: "2022"
+      name: europe-west1-docker.pkg.dev/simula-summer-school-2023/sss/simula-summer-school
+      tag: "2023"
       pullPolicy: Always
     memory:
       limit: 3G
@@ -63,11 +62,11 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 3
+      replicas: 0
     userPods:
       nodeAffinity:
         # TODO: 'require' when we deploy for real
-        matchNodePurpose: require
+        # matchNodePurpose: require
     corePods:
       nodeAffinity:
         matchNodePurpose: require
