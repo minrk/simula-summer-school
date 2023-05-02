@@ -83,3 +83,7 @@ def setup_handlers(web_app):
 def _load_jupyter_server_extension(nbapp):
     setup_handlers(nbapp.web_app)
     pull_thread().submit(pull_everything)
+
+
+if __name__ == "__main__":
+    pull_everything()
