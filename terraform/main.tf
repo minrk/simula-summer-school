@@ -3,22 +3,43 @@ terraform {
   #   bucket = "tf-state-..."
   #   prefix = "terraform/state"
   # }
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "4.63.1"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.9.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.20.0"
+    }
+  }
 }
 data "google_client_config" "provider" {}
 
 provider "google" {
-  project = "simula-summer-school-2022"
+  project = "simula-summer-school-2023"
   region  = "europe-west1"
   zone    = "europe-west1-b"
 }
 
 locals {
-  gke_version  = "1.21.9-gke.1002"
+  gke_version  = "1.24.11-gke.1000"
   cluster_name = "sss"
   location     = data.google_client_config.provider.region # regional cluster
-  region       = data.google_client_config.provider.region
-  zone         = data.google_client_config.provider.zone
+  # region       = data.google_client_config.provider.region
+  zone = data.google_client_config.provider.zone
 
+}
+
+resource "google_artifact_registry_repository" "repo" {
+  location      = local.location
+  repository_id = "sss"
+  description   = "summer school container registry"
+  format        = "DOCKER"
 }
 
 resource "google_container_cluster" "cluster" {
@@ -57,8 +78,8 @@ resource "google_container_cluster" "cluster" {
 
 # define node pools here, too hard to encode with variables
 resource "google_container_node_pool" "core" {
-  name     = "core-202204"
-  cluster  = local.cluster_name
+  name     = "core-202304"
+  cluster  = google_container_cluster.cluster.name
   location = local.location # location of *cluster*
   # node_locations lets us specify a single-zone regional cluster:
   node_locations = [local.zone]
@@ -75,7 +96,7 @@ resource "google_container_node_pool" "core" {
   version    = local.gke_version
 
   node_config {
-    machine_type = "n1-highmem-4"
+    machine_type = "e2-highmem-4"
     disk_size_gb = 100
     disk_type    = "pd-balanced"
 
@@ -96,8 +117,8 @@ resource "google_container_node_pool" "core" {
 }
 
 resource "google_container_node_pool" "user" {
-  name     = "user-202204"
-  cluster  = local.cluster_name
+  name     = "user-202304"
+  cluster  = google_container_cluster.cluster.name
   location = local.location # location of *cluster*
   # node_locations lets us specify a single-zone regional cluster:
   node_locations = [local.zone]
@@ -114,10 +135,9 @@ resource "google_container_node_pool" "user" {
 
 
   node_config {
-    machine_type    = "n1-highmem-8"
-    disk_size_gb    = 250
-    disk_type       = "pd-balanced"
-    local_ssd_count = 1
+    machine_type = "e2-highmem-8"
+    disk_size_gb = 100
+    disk_type    = "pd-balanced"
 
     labels = {
       "hub.jupyter.org/node-purpose" = "user"
@@ -165,6 +185,7 @@ resource "kubernetes_namespace" "hub" {
 }
 
 provider "helm" {
+
   kubernetes {
     config_path    = "~/.kube/config"
     config_context = "sss"
@@ -174,7 +195,7 @@ provider "helm" {
 module "cert-manager" {
   source        = "basisai/cert-manager/helm"
   version       = "0.1.3"
-  chart_version = "1.7.2"
+  chart_version = "1.11.0"
 
   chart_namespace = "cert-manager"
   depends_on      = [kubernetes_namespace.cert-manager]
