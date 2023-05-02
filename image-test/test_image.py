@@ -38,7 +38,7 @@ def test_puller():
 
 
 def test_torch():
-    import torch
+    import torch  # noqa
 
 
 def test_dolfin():
@@ -47,6 +47,10 @@ def test_dolfin():
     mesh = UnitIntervalMesh(20)
     elem = FiniteElement("CG", interval, 1)
     W = FunctionSpace(mesh, elem)
+
+
+def test_mshr():
+    import mshr  # noqa
 
 
 def test_neuron():
