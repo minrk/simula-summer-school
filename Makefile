@@ -84,7 +84,7 @@ conda-rsync:
 conda-fetch:
 	rsync -av --delete -e 'docker-machine ssh sss-builder' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
 
-conda/%: conda
+conda/%: conda conda-rsync
 	docker run --rm -it -e CPU_COUNT=4 -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*
 
 conda-upload/%:

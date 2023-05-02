@@ -18,7 +18,7 @@ dependencies:
   - browndye
 
   # packaged in this repo:
-  # - "minrk::opencarp=12"
+  - "minrk::opencarp=12"
   # TODO:
   # - carputils?
 

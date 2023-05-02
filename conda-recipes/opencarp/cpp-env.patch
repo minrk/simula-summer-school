@@ -16,8 +16,8 @@ index dd774f0..bdbc743 100644
 
  set(CARP_FILES "openCARP_d.h" "openCARP_p.cc" "openCARP_p.h")
  add_custom_command(OUTPUT ${CARP_FILES}
--    COMMAND cpp -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/openCARP.prm | awk ' !(/pragma/||/^\# /) ' | ../param/param - openCARP -ext prm -ansi
-+    COMMAND $ENV{CPP} -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/openCARP.prm | awk ' !(/pragma/||/^\# /) ' | ../param/param - openCARP -ext prm -ansi
+-    COMMAND cpp -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/openCARP.prm | awk ' !(/pragma/||/^\# /) ' | ${PARAM_BINARY} - openCARP -ext prm -ansi
++    COMMAND $ENV{CPP} -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/openCARP.prm | awk ' !(/pragma/||/^\# /) ' | ${PARAM_BINARY} - openCARP -ext prm -ansi
      DEPENDS param-bin "openCARP.prm"
      COMMENT "Use param to generate ${CARP_FILES} from openCARP.prm"
  )
@@ -29,8 +29,8 @@ index 2a2c39c..2254003 100644
 
  set(MESHER_FILES "mesher_d.h" "mesher_p.cc" "mesher_p.h")
  add_custom_command(OUTPUT ${MESHER_FILES}
--    COMMAND cpp -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/mesher.prm | awk ' !(/pragma/||/^\# /) ' | ../../param/param - mesher -ext prm -ansi
-+    COMMAND $ENV{CPP} -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/mesher.prm | awk ' !(/pragma/||/^\# /) ' | ../../param/param - mesher -ext prm -ansi
+-    COMMAND cpp -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/mesher.prm | awk ' !(/pragma/||/^\# /) ' | ${PARAM_BINARY} - mesher -ext prm -ansi
++    COMMAND $ENV{CPP} -DSOLVE_CURRENT -DWITH_BLAS -D_GNU_SOURCE -traditional ${CMAKE_CURRENT_SOURCE_DIR}/mesher.prm | awk ' !(/pragma/||/^\# /) ' | ${PARAM_BINARY} - mesher -ext prm -ansi
      DEPENDS param-bin "mesher.prm"
      COMMENT "Use param to generate ${MESHER_FILES} from mesher.prm"
  )

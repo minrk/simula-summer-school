@@ -1,6 +1,6 @@
 {% set name = "opencarp" %}
-{% set version = "9.0" %}
-{% set build = 0 %}
+{% set version = "12.0" %}
+{% set build = 1 %}
 
 package:
   name: {{ name | lower }}
@@ -12,7 +12,7 @@ source:
   git_url: https://git.opencarp.org/openCARP/openCARP
   git_ref: v{{ version }}
   # url: https://git.opencarp.org/api/v4/projects/16/packages/generic/openCARP-inclSubmodules/v{{ version }}/openCARP-v{{ version }}-inclSubmodules.zip
-  # sha256: 8c43bbc4e18a7de16271626339a6edd60d38fa8d467c0724d71c9f5c45b71527
+  # sha256: 7e383b82a50be3970070c200f2db89303e1f148838e136a89a3778fc7a49871b
   patches:
     - cpp-env.patch
 
@@ -31,9 +31,9 @@ requirements:
     - make
     # # - gengetopt not packaged yet, from apt for now
     - pkg-config
-    - python 3.9
+    - python 3.10
   host:
-    - petsc 3.16
+    - petsc
     - mpich
     - zlib
     - liblapack
