@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-lectures_dir = "SSCP_2022_lectures"
+lectures_dir = "SSCP_2023_lectures"
 
 
 @pytest.fixture(scope="session")
@@ -50,14 +50,14 @@ def test_dolfin():
 
 
 def test_neuron():
-    from neuron import h, rxd
+    from neuron import h, rxd  # noqa
 
 
 @pytest.mark.parametrize(
     "notebook",
     [
-        f"{lectures_dir}/L15 (FEniCS Mechanics)/L13_solved.ipynb",
-        f"{lectures_dir}/Stream 3 (Neural Electrophysiology)/Exercise_20C_NEURON_RxD/NEURON_RxD_exercise2.ipynb",
+        f"{lectures_dir}/L14 (FEniCS Mechanics)/L13_solved.ipynb",
+        f"{lectures_dir}/Stream 1 (Cardiac Mechanics)/L19-20/L20-solved.ipynb",
     ],
 )
 def test_notebook(notebook, needs_puller):

@@ -46,7 +46,7 @@ USER $NB_UID
 # fenics 3d plotting doesn't like mpl 3
 # RUN pip install --no-cache 'matplotlib<3'
 
-COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.9/site-packages/pull_server_ext.py
+COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.10/site-packages/pull_server_ext.py
 COPY pull-button.js /tmp/
 RUN jupyter server extension enable --sys-prefix pull_server_ext && \
     jupyter server extension enable --sys-prefix nbdime && \
@@ -57,7 +57,7 @@ RUN jupyter server extension enable --sys-prefix pull_server_ext && \
     # jupyter nbextension     enable  --py --sys-prefix nbnovnc
 
 WORKDIR /home/$NB_USER
-COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
+COPY jupyter_server_config.py /etc/jupyter/jupyter_server_config.py
 # USER root
 # RUN apt-get update && apt-get -yq dist-upgrade \
 #  && apt-get install -yq --no-install-recommends \

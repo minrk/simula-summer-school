@@ -41,7 +41,7 @@ def pull_repo(repo_url):
 
 def pull_everything():
     r = requests.get(
-        "https://raw.githubusercontent.com/minrk/simula-summer-school/2022/repos.txt"
+        "https://raw.githubusercontent.com/minrk/simula-summer-school/2023/repos.txt"
     )
     r.raise_for_status()
     for line in r.text.splitlines():
@@ -80,6 +80,6 @@ def setup_handlers(web_app):
     )
 
 
-def load_jupyter_server_extension(nbapp):
+def _load_jupyter_server_extension(nbapp):
     setup_handlers(nbapp.web_app)
     pull_thread().submit(pull_everything)
