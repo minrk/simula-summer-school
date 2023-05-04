@@ -9,9 +9,9 @@ package:
 source:
   # simulator/build_info.py means build can only be done from git
   # not the published source distributions
-  git_url: https://git.opencarp.org/openCARP/openCARP
-  git_ref: v{{ version }}
-  # url: https://git.opencarp.org/api/v4/projects/16/packages/generic/openCARP-inclSubmodules/v{{ version }}/openCARP-v{{ version }}-inclSubmodules.zip
+  # git_url: https://git.opencarp.org/openCARP/openCARP
+  # git_ref: v{{ version }}
+  url: https://git.opencarp.org/api/v4/projects/16/packages/generic/openCARP-inclSubmodules/v{{ version }}/openCARP-v{{ version }}-inclSubmodules.zip
   # sha256: 7e383b82a50be3970070c200f2db89303e1f148838e136a89a3778fc7a49871b
   patches:
     - cpp-env.patch
