@@ -51,3 +51,6 @@ dependencies:
   - ipykernel
   - ipywidgets
   - nbgitpuller
+  
+  # Progress-bars
+  - tqdm
