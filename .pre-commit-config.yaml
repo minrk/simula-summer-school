@@ -1,7 +1,7 @@
 repos:
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
       - id: isort
         args:
@@ -9,17 +9,17 @@ repos:
 
   # Autoformat: Python code
   - repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 23.3.0
     hooks:
       - id: black
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.2.1
+    rev: v3.0.0-alpha.9-for-vscode
     hooks:
       - id: prettier
 
   - repo: https://github.com/lovesegfault/beautysh
-    rev: 6.0.1
+    rev: v6.2.1
     hooks:
       - id: beautysh
 
@@ -33,19 +33,19 @@ repos:
         types: [shell]
         require_serial: true # shellcheck can detect sourcing this way
 
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: "3.8.4"
+  - repo: https://github.com/PyCQA/flake8
+    rev: "6.0.0"
     hooks:
       - id: flake8
 
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.12
+    rev: v0.1.21
     hooks:
       - id: terraform-fmt
       - id: tflint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.4.0
     hooks:
       - id: end-of-file-fixer
       - id: check-case-conflict
