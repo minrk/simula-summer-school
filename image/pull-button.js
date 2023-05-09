@@ -33,8 +33,8 @@ define(function () {
               .addClass("btn btn-default btn-xs")
               .click(updateAll)
               .attr("title", "Update repos")
-              .append($("<i>").addClass("fa fa-download"))
-          )
+              .append($("<i>").addClass("fa fa-download")),
+          ),
       );
     }
   }
