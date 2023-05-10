@@ -1,3 +1,4 @@
+exclude: "(.*/)?secrets(.yaml|/.*)"
 repos:
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
