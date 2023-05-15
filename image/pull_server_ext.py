@@ -40,17 +40,8 @@ def pull_repo(repo_url):
 
 
 def pull_everything():
-    r = requests.get(
-        "https://raw.githubusercontent.com/minrk/simula-summer-school/2023/repos.txt"
-    )
-    r.raise_for_status()
-    for line in r.text.splitlines():
-        line = line.strip()
-        if line.startswith("#"):
-            continue
-        if not line:
-            continue
-        repo_url = line
+    repos = ["https://github.com/finsberg/simber-workshop-2023"]
+    for repo_url in repos:
         try:
             pull_repo(repo_url)
         except Exception:

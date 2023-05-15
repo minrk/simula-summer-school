@@ -1,8 +1,9 @@
-KUBE_CTX=sss
-GKE_PROJECT=simula-summer-school-2023
-GKE_ZONE=europe-west1
-IMAGE=$(GKE_ZONE)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2023
+KUBE_CTX=simber
+GKE_PROJECT=simber-workshop-may2023
+GKE_ZONE=europe-north1
+IMAGE=$(GKE_ZONE)-docker.pkg.dev/$(GKE_PROJECT)/sss/user-image:2023
 NS=jupyterhub
+BUILDER_NAME=simber
 
 .PHONY: image image-test push conda-rsync conda-fetch terraform kube-creds
 
@@ -19,6 +20,9 @@ image-test:
 dive:
 	dive $(IMAGE)
 
+push-creds:
+	gcloud auth configure-docker $(GKE_ZONE)-docker.pkg.dev
+
 push:
 	docker push $(IMAGE)
 
@@ -32,7 +36,7 @@ builder-firewall-rule:
 	gcloud --project=$(GKE_PROJECT) compute firewall-rules create docker-machines --allow=tcp:22
 
 builder-new:
-	docker-machine create sss-builder \
+	docker-machine create $(BUILDER_NAME) \
 	    --driver=google \
 	    --google-project=$(GKE_PROJECT) \
 	    --google-preemptible \
@@ -40,29 +44,29 @@ builder-new:
 	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2204-jammy-v20230413 \
 	    --google-machine-type=e2-standard-4 \
 	    --google-zone=europe-west1-b
-	docker-machine ssh sss-builder -- sudo apt-get install -y rsync
-	docker-machine ssh sss-builder -- sudo mkdir -p $(PWD)
-	docker-machine ssh sss-builder -- sudo chown ubuntu $(PWD)
+	docker-machine ssh $(BUILDER_NAME) -- sudo apt-get install -y rsync
+	docker-machine ssh $(BUILDER_NAME) -- sudo mkdir -p $(PWD)
+	docker-machine ssh $(BUILDER_NAME) -- sudo chown ubuntu $(PWD)
 
 builder-start:
-	docker-machine start sss-builder
+	docker-machine start $(BUILDER_NAME)
 	make builder-certs
 
 builder-certs:
-	docker-machine regenerate-certs -f sss-builder
+	docker-machine regenerate-certs -f $(BUILDER_NAME)
 
 builder-env:
-	@docker-machine env sss-builder
+	@docker-machine env $(BUILDER_NAME)
 
 builder-rm:
-	docker-machine rm sss-builder
+	docker-machine rm $(BUILDER_NAME)
 
 terraform:
 	cd terraform; terraform init -upgrade; terraform apply
 
 kube-creds:
 	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_ZONE) $(KUBE_CTX)
-	kubectx sss=.
+	kubectx $(KUBE_CTX)=.
 	@kubectl create namespace jupyterhub
 	kubens jupyterhub
 
@@ -79,10 +83,10 @@ conda:
 	docker build -t conda-pkgs conda-recipes
 
 conda-rsync:
-	rsync -av --delete -e 'docker-machine ssh sss-builder' conda-recipes/ :$(PWD)/conda-recipes/
+	rsync -av --delete -e 'docker-machine ssh $(BUILDER_NAME)' conda-recipes/ :$(PWD)/conda-recipes/
 
 conda-fetch:
-	rsync -av --delete -e 'docker-machine ssh sss-builder' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
+	rsync -av --delete -e 'docker-machine ssh $(BUILDER_NAME)' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
 
 conda/%: conda conda-rsync
 	docker run --rm -it -e CPU_COUNT=4 -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*

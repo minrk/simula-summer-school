@@ -1,8 +1,10 @@
 terraform {
-  # backend "gcs" {
-  #   bucket = "tf-state-..."
-  #   prefix = "terraform/state"
-  # }
+  backend "gcs" {
+    # make bucket by hand first
+    # https://console.cloud.google.com/storage/browser
+    bucket = "tf-state-simber-workshop-may2023"
+    prefix = "terraform/state"
+  }
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -21,14 +23,14 @@ terraform {
 data "google_client_config" "provider" {}
 
 provider "google" {
-  project = "simula-summer-school-2023"
-  region  = "europe-west1"
-  zone    = "europe-west1-b"
+  project = "simber-workshop-may2023"
+  region  = "europe-north1"
+  zone    = "europe-north1-b"
 }
 
 locals {
   gke_version  = "1.24.11-gke.1000"
-  cluster_name = "sss"
+  cluster_name = "simber"
   location     = data.google_client_config.provider.region # regional cluster
   # region       = data.google_client_config.provider.region
   zone = data.google_client_config.provider.zone
@@ -188,7 +190,7 @@ provider "helm" {
 
   kubernetes {
     config_path    = "~/.kube/config"
-    config_context = "sss"
+    config_context = local.cluster_name
   }
 }
 

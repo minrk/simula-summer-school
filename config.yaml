@@ -14,18 +14,18 @@ jupyterhub:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - simula.minrk.net
+      - simber.minrk.net
     tls:
       - secretName: tls-jupyterhub
         hosts:
-          - simula.minrk.net
+          - simber.minrk.net
 
   singleuser:
     events: true
     storage:
       homeMountPath: /home/user
     image:
-      name: europe-west1-docker.pkg.dev/simula-summer-school-2023/sss/simula-summer-school
+      name: europe-north1-docker.pkg.dev/simber-workshop-may2023/sss/user-image
       tag: "2023"
       pullPolicy: Always
     memory:
@@ -86,10 +86,10 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - grafana.simula.minrk.net
+      - grafana.simber.minrk.net
     tls:
       - hosts:
-          - grafana.simula.minrk.net
+          - grafana.simber.minrk.net
         secretName: tls-grafana
   persistence:
     size: 2Gi
@@ -103,7 +103,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.simula.minrk.net
+          url: https://prometheus.simber.minrk.net
           access: direct
           isDefault: true
           editable: false
@@ -129,10 +129,10 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - prometheus.simula.minrk.net
+        - prometheus.simber.minrk.net
       tls:
         - hosts:
-            - prometheus.simula.minrk.net
+            - prometheus.simber.minrk.net
           secretName: tls-prometheus
   kube-state-metrics:
     metricLabelsAllowlist:
