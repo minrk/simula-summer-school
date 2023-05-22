@@ -29,8 +29,8 @@ jupyterhub:
       tag: "2023"
       pullPolicy: Always
     memory:
-      limit: 4G
-      guarantee: 3G
+      limit: 8G
+      guarantee: 7G
     cpu:
       limit: 1
       guarantee: 0.5
@@ -62,11 +62,11 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 0
+      replicas: 1
     userPods:
       nodeAffinity:
         # TODO: 'require' when we deploy for real
-        # matchNodePurpose: require
+        matchNodePurpose: require
     corePods:
       nodeAffinity:
         matchNodePurpose: require
