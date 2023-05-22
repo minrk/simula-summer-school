@@ -62,11 +62,11 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 1
+      replicas: 0
     userPods:
       nodeAffinity:
         # TODO: 'require' when we deploy for real
-        matchNodePurpose: require
+        matchNodePurpose: prefer
     corePods:
       nodeAffinity:
         matchNodePurpose: require

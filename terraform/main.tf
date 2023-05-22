@@ -92,13 +92,13 @@ resource "google_container_node_pool" "core" {
 
   autoscaling {
     min_node_count = 1
-    max_node_count = 2
+    max_node_count = 1
   }
   node_count = 1
   version    = local.gke_version
 
   node_config {
-    machine_type = "e2-highmem-4"
+    machine_type = "e2-standard-4"
     disk_size_gb = 100
     disk_type    = "pd-balanced"
 
