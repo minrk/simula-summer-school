@@ -22,6 +22,7 @@ dependencies:
   - jupyterhub-base=4.0.0
   - jupyterlab_code_formatter
   - jupyterlab-git
+  - jupyter-resource-usage
   - nbclassic
   - nbdime
   - notebook
