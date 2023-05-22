@@ -1,8 +1,10 @@
 import os
 
+import nbformat
 import pytest
+from nbconvert.preprocessors import ExecutePreprocessor
 
-lectures_dir = "SSCP_2023_lectures"
+lectures_dir = "simber-workshop-2023"
 
 
 @pytest.fixture(scope="session")
@@ -37,38 +39,22 @@ def test_puller():
     assert os.path.exists(lectures_dir)
 
 
-def test_torch():
-    import torch  # noqa
-
-
-def test_dolfin():
-    from dolfin import FiniteElement, FunctionSpace, UnitIntervalMesh, interval
-
-    mesh = UnitIntervalMesh(20)
-    elem = FiniteElement("CG", interval, 1)
-    W = FunctionSpace(mesh, elem)
-
-
-def test_mshr():
-    import mshr  # noqa
-
-
-def test_neuron():
-    from neuron import h, rxd  # noqa
+def test_mps():
+    import mps  # noqa
 
 
 @pytest.mark.parametrize(
     "notebook",
     [
-        f"{lectures_dir}/L14 (FEniCS Mechanics)/L13_solved.ipynb",
-        f"{lectures_dir}/Stream 1 (Cardiac Mechanics)/L19-20/L20-solved.ipynb",
+        "download_data.ipynb",
+        "read_data.ipynb",
+        "analyze_trace.ipynb",
+        "motion.ipynb",
+        "tpe.ipynb",
     ],
 )
 def test_notebook(notebook, needs_puller):
-    import nbformat
-    from nbconvert.preprocessors import ExecutePreprocessor
-
-    with open(notebook) as f:
+    with open(os.path.join(lectures_dir, notebook)) as f:
         nb = nbformat.read(f, as_version=4)
     p = ExecutePreprocessor()
-    p.preprocess(nb)
+    p.preprocess(nb, resources={"metadata": {"path": lectures_dir}})
