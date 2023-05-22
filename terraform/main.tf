@@ -137,7 +137,7 @@ resource "google_container_node_pool" "user" {
 
 
   node_config {
-    machine_type = "e2-highmem-8"
+    machine_type = "e2-standard-8"
     disk_size_gb = 100
     disk_type    = "pd-balanced"
 
