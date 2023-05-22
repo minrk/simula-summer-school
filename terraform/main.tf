@@ -144,6 +144,13 @@ resource "google_container_node_pool" "user" {
     labels = {
       "hub.jupyter.org/node-purpose" = "user"
     }
+    taint = [
+      {
+        key    = "hub.jupyter.org/dedicated"
+        value  = "user"
+        effect = "NO_SCHEDULE"
+      }
+    ]
     # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
     oauth_scopes = [
       "storage-ro",
