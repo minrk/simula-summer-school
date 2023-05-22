@@ -6,7 +6,6 @@ dependencies:
   - conda
 
   # scientific packages
-  - py-opencv
   - cardiac-mps
   - mps-motion
   - py-opencv
@@ -15,6 +14,8 @@ dependencies:
   - python=3.10
   - black
   - isort
+  - pip
+  - pytest
 
   # IPython/Jupyter
   - jupyterlab
