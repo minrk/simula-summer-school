@@ -10,6 +10,17 @@ dependencies:
   - mps-motion
   - py-opencv
 
+  # Nick
+  - pandas
+  - scikit-learn
+  - pathlib
+
+  # Andy
+  - statsmodels
+  - scikit-posthocs
+  - scipy
+  - seaborn
+
   # basic Python
   - python=3.10
   - black
