@@ -16,6 +16,7 @@ dependencies:
   - lfpy
   - python-neo
   - browndye
+  - brian2
 
   # packaged in this repo:
   - "minrk::opencarp=12"
