@@ -42,7 +42,7 @@ dependencies:
 
   # IPython/Jupyter
   # - nodejs=14
-  - jupyterlab
+  - jupyterlab=3.*
   - jupyter-resource-usage
   - jupyterhub-base=4.0.0
   - jupyterlab_code_formatter
