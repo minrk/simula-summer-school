@@ -14,11 +14,11 @@ jupyterhub:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - simula.minrk.net
+      - sscp.minrk.net
     tls:
       - secretName: tls-jupyterhub
         hosts:
-          - simula.minrk.net
+          - sscp.minrk.net
 
   singleuser:
     events: true
@@ -86,10 +86,10 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     hosts:
-      - grafana.simula.minrk.net
+      - grafana.sscp.minrk.net
     tls:
       - hosts:
-          - grafana.simula.minrk.net
+          - grafana.sscp.minrk.net
         secretName: tls-grafana
   persistence:
     size: 2Gi
@@ -103,7 +103,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.simula.minrk.net
+          url: https://prometheus.sscp.minrk.net
           access: direct
           isDefault: true
           editable: false
@@ -129,10 +129,10 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - prometheus.simula.minrk.net
+        - prometheus.sscp.minrk.net
       tls:
         - hosts:
-            - prometheus.simula.minrk.net
+            - prometheus.sscp.minrk.net
           secretName: tls-prometheus
   kube-state-metrics:
     metricLabelsAllowlist:
