@@ -41,7 +41,7 @@ def pull_repo(repo_url):
 
 def pull_everything():
     r = requests.get(
-        "https://raw.githubusercontent.com/minrk/simula-summer-school/2023/repos.txt"
+        "https://raw.githubusercontent.com/minrk/simula-summer-school/HEAD/repos.txt"
     )
     r.raise_for_status()
     for line in r.text.splitlines():
