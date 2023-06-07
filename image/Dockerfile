@@ -54,6 +54,9 @@ RUN jupyter server extension enable --sys-prefix pull_server_ext && \
     # jupyter nbextension     install --py --sys-prefix nbnovnc && \
     # jupyter nbextension     enable  --py --sys-prefix nbnovnc
 
+# disable "Jupyter news" pop-up
+RUN jupyter labextension disable  "@jupyterlab/apputils-extension:announcements"
+
 WORKDIR /home/$NB_USER
 COPY jupyter_server_config.py /etc/jupyter/jupyter_server_config.py
 # USER root
