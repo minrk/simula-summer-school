@@ -27,15 +27,13 @@ COPY install-miniconda.bash /tmp/install-miniconda.bash
 RUN --mount=type=cache,target=/tmp/conda bash /tmp/install-miniconda.bash
 COPY condarc $CONDA_DIR/.condarc
 
-# ensure libstdc++ comes from libstdcxx, not gcc 4.8
-# RUN conda install -y --force libstdcxx-ng=7.2.* \
- # && conda clean -tipsy
-
 USER $NB_UID
 
 # install some extra things with requirements.txt
-# COPY requirements.txt /tmp/requirements.txt
-# RUN pip install --no-cache -r /tmp/requirements.txt && \
+COPY requirements.txt /tmp/requirements.txt
+ENV PIP_CACHE_DIR=/tmp/pip-cache
+RUN  --mount=type=cache,target=$PIP_CACHE_DIR pip install --no-cache -r /tmp/requirements.txt
+# && \
 #     mv -v $HOME/.local/share/jupyter/kernels/* $CONDA_DIR/share/jupyter/kernels
 
 # enable nbdime globally
