@@ -1,6 +1,7 @@
 """
 A severely stripped-down version of data-8/nbpuller
 """
+
 from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from subprocess import check_output
