@@ -1,2 +1,2 @@
 # add repos here (full git urls)
-https://github.com/Simula-SSCP/SSCP_2023_lectures
+https://github.com/Simula-SSCP/SSCP_2024_lectures
