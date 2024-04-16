@@ -1,7 +1,7 @@
 KUBE_CTX=sss
-GKE_PROJECT=simula-summer-school-2023
+GKE_PROJECT=simula-summer-school-2024
 GKE_ZONE=europe-west1
-IMAGE=$(GKE_ZONE)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2023
+IMAGE=$(GKE_ZONE)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2024
 NS=jupyterhub
 BUILDER_NAME=sss-builder
 
