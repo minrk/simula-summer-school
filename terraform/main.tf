@@ -21,13 +21,13 @@ terraform {
 data "google_client_config" "provider" {}
 
 provider "google" {
-  project = "simula-summer-school-2023"
+  project = "simula-summer-school-2024"
   region  = "europe-west1"
   zone    = "europe-west1-b"
 }
 
 locals {
-  gke_version  = "1.24.11-gke.1000"
+  gke_version  = "1.27.8-gke.1067004"
   cluster_name = "sss"
   location     = data.google_client_config.provider.region # regional cluster
   # region       = data.google_client_config.provider.region
@@ -78,7 +78,7 @@ resource "google_container_cluster" "cluster" {
 
 # define node pools here, too hard to encode with variables
 resource "google_container_node_pool" "core" {
-  name     = "core-202304"
+  name     = "core-202404"
   cluster  = google_container_cluster.cluster.name
   location = local.location # location of *cluster*
   # node_locations lets us specify a single-zone regional cluster:
@@ -117,7 +117,7 @@ resource "google_container_node_pool" "core" {
 }
 
 resource "google_container_node_pool" "user" {
-  name     = "user-202304"
+  name     = "user-202404"
   cluster  = google_container_cluster.cluster.name
   location = local.location # location of *cluster*
   # node_locations lets us specify a single-zone regional cluster:
@@ -195,7 +195,7 @@ provider "helm" {
 module "cert-manager" {
   source        = "basisai/cert-manager/helm"
   version       = "0.1.3"
-  chart_version = "1.11.0"
+  chart_version = "1.14.4"
 
   chart_namespace = "cert-manager"
   depends_on      = [kubernetes_namespace.cert-manager]
