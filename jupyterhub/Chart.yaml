@@ -8,23 +8,23 @@ dependencies:
   # Source code:   https://github.com/kubernetes/ingress-nginx/tree/HEAD/charts/ingress-nginx
   # App changelog: https://github.com/kubernetes/ingress-nginx/blob/HEAD/Changelog.md
   - name: ingress-nginx
-    version: 4.6.0
+    version: 4.10.0
     repository: https://kubernetes.github.io/ingress-nginx
 
   # Prometheus for collection of metrics.
   # Source code:   https://github.com/prometheus-community/helm-charts/tree/HEAD/charts/prometheus
   # App changelog: https://github.com/prometheus/prometheus/blob/HEAD/CHANGELOG.md
   - name: prometheus
-    version: 20.2.0
+    version: 25.19.1
     repository: https://prometheus-community.github.io/helm-charts
 
   # Grafana for dashboarding of metrics.
   # Source code:   https://github.com/grafana/helm-charts/tree/HEAD/charts/grafana
   # App changelog: https://github.com/grafana/grafana/blob/HEAD/CHANGELOG.md
   - name: grafana
-    version: 6.54.0
+    version: 7.3.8
     repository: https://grafana.github.io/helm-charts
 
   - name: jupyterhub
-    version: 3.0.0-0.dev.git.6139.h796c59b6
+    version: 3.3.7
     repository: https://jupyterhub.github.io/helm-chart
