@@ -2,7 +2,7 @@ exclude: "(.*/)?secrets(.yaml|/.*)"
 repos:
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 5.13.2
     hooks:
       - id: isort
         args:
@@ -10,12 +10,12 @@ repos:
 
   # Autoformat: Python code
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 24.4.0
     hooks:
       - id: black
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.9-for-vscode
+    rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
 
@@ -35,18 +35,18 @@ repos:
         require_serial: true # shellcheck can detect sourcing this way
 
   - repo: https://github.com/pycqa/flake8
-    rev: "6.0.0"
+    rev: "7.0.0"
     hooks:
       - id: flake8
 
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.22
+    rev: v0.1.23
     hooks:
       - id: terraform-fmt
       - id: tflint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.6.0
     hooks:
       - id: end-of-file-fixer
       - id: check-case-conflict
