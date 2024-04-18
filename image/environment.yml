@@ -43,9 +43,9 @@ dependencies:
 
   # IPython/Jupyter
   # - nodejs=14
-  - jupyterlab=3.*
+  - jupyterlab=4.*
   - jupyter-resource-usage
-  - jupyterhub-base=4.0.0
+  - jupyterhub-base=4.1.5
   - jupyterlab_code_formatter
   - jupyterlab-git
   - nbclassic
