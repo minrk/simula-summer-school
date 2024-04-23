@@ -1,11 +1,12 @@
 KUBE_CTX=sss
 GKE_PROJECT=simula-summer-school-2024
-GKE_ZONE=europe-west1
-IMAGE=$(GKE_ZONE)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2024
+GKE_REGION=europe-west1
+GKE_ZONE=$(GKE_REGION)-b
+IMAGE=$(GKE_REGION)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2024
 NS=jupyterhub
 BUILDER_NAME=sss-builder
 
-.PHONY: image image-test push conda-rsync conda-fetch terraform kube-creds
+.PHONY: image image-test push conda-rsync conda-fetch terraform kube-creds builder-new-new
 
 image: $(wildcard image/*)
 	docker buildx build --platform linux/amd64 --load -t $(IMAGE) image
@@ -21,7 +22,7 @@ dive:
 	dive $(IMAGE)
 
 push-creds:
-	gcloud auth configure-docker $(GKE_ZONE)-docker.pkg.dev
+	gcloud auth configure-docker $(GKE_REGION)-docker.pkg.dev
 
 push:
 	docker push $(IMAGE)
@@ -36,27 +37,29 @@ builder-firewall-rule:
 	gcloud --project=$(GKE_PROJECT) compute firewall-rules create docker-machines --allow=tcp:22
 
 builder-new:
-	docker-machine create $(BUILDER_NAME) \
-	    --driver=google \
-	    --google-project=$(GKE_PROJECT) \
-	    --google-preemptible \
-	    --google-disk-size=100 \
-	    --google-machine-image=ubuntu-os-cloud/global/images/ubuntu-minimal-2204-jammy-v20230413 \
-	    --google-machine-type=e2-standard-4 \
-	    --google-zone=europe-west1-b
-	docker-machine ssh $(BUILDER_NAME) -- sudo apt-get install -y rsync
-	docker-machine ssh $(BUILDER_NAME) -- sudo mkdir -p $(PWD)
-	docker-machine ssh $(BUILDER_NAME) -- sudo chown ubuntu $(PWD)
+	gcloud compute instances create $(BUILDER_NAME) \
+		--project=$(GKE_PROJECT) \
+		--zone=$(GKE_ZONE) \
+		--preemptible \
+		--machine-type=e2-standard-4 \
+		--boot-disk-size=100 \
+		--boot-disk-type=pd-balanced \
+		--image-project=ubuntu-os-cloud \
+		--image-family=ubuntu-minimal-2204-lts
+	gcloud compute config-ssh --project=$(GKE_PROJECT)
+	# setup docker
+	gcloud compute ssh --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME) -- "curl https://get.docker.com | bash; sudo usermod -aG docker $$(whoami)"
+	# setup rsync
+	gcloud compute ssh --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME) -- 'sudo apt-get -y install rsync'
+	gcloud compute ssh --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME) -- 'sudo mkdir -p $(PWD) && sudo chown $$(whoami) $(PWD)'
 
 builder-start:
-	docker-machine start $(BUILDER_NAME)
-	make builder-certs
-
-builder-certs:
-	docker-machine regenerate-certs -f $(BUILDER_NAME)
+	gcloud compute instances start --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME)
+	# reload
+	gcloud compute config-ssh --project=$(GKE_PROJECT)
 
 builder-env:
-	@docker-machine env $(BUILDER_NAME)
+	@echo "export DOCKER_HOST=ssh://$(BUILDER_NAME).$(GKE_ZONE).$(GKE_PROJECT)"
 
 builder-rm:
 	docker-machine rm $(BUILDER_NAME)
@@ -65,7 +68,7 @@ terraform:
 	cd terraform; terraform init -upgrade; terraform apply
 
 kube-creds:
-	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_ZONE) $(KUBE_CTX)
+	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_REGION) $(KUBE_CTX)
 	kubectx $(KUBE_CTX)=.
 	@kubectl create namespace jupyterhub
 	kubens jupyterhub
@@ -83,10 +86,10 @@ conda:
 	docker build -t conda-pkgs conda-recipes
 
 conda-rsync:
-	rsync -av --delete -e 'docker-machine ssh $(BUILDER_NAME)' conda-recipes/ :$(PWD)/conda-recipes/
+	rsync -av --delete -e 'gcloud compute ssh --project $(GKE_PROJECT) $(BUILDER_NAME) --' conda-recipes/ :$(PWD)/conda-recipes/
 
 conda-fetch:
-	rsync -av --delete -e 'docker-machine ssh $(BUILDER_NAME)' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
+	rsync -av --delete -e 'gcloud compute ssh --project $(GKE_PROJECT) $(BUILDER_NAME) --' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
 
 conda/%: conda conda-rsync
 	docker run --rm -it -e CPU_COUNT=4 -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*
