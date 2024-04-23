@@ -4,5 +4,5 @@
 set -x
 
 rsync -aru /io/conda-bld/ /opt/conda/conda-bld/
-conda mambabuild "$@"
+conda build "$@"
 rsync -aru /opt/conda/conda-bld/ /io/conda-bld/

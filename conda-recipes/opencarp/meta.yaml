@@ -1,5 +1,5 @@
 {% set name = "opencarp" %}
-{% set version = "12.0" %}
+{% set version = "15.0" %}
 {% set build = 1 %}
 
 package:
@@ -29,7 +29,7 @@ requirements:
     - {{ compiler('cxx') }}
     - cmake
     - make
-    # # - gengetopt not packaged yet, from apt for now
+    - gengetopt
     - pkg-config
     - python 3.10
   host:
