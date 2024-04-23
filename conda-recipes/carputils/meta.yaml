@@ -1,0 +1,43 @@
+{% set name = "carputils" %}
+{% set version = "2024.4.15" %}
+{% set build = 0 %}
+
+package:
+  name: {{ name | lower }}
+  version: {{ version }}
+
+source:
+  # carputils doesn't appear to make releases
+  git_url: https://git.opencarp.org/openCARP/carputils
+  git_rev: b68cbe734851facf78f0131fb5dc583988b8c814
+
+build:
+  number: {{ build }}
+  script: "python -m pip install --no-binary :all: --no-deps -vv ."
+  skip: true  # [py < 310]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+    - python
+    - numpy
+  run:
+    - opencarp
+    - python
+    - numpy
+  # more dependencies specified in https://git.opencarp.org/openCARP/carputils/-/blob/master/requirements.py3.txt
+  # but most if not all seem to be optional
+  # (and with lots of inappropriate pinning)
+
+test:
+  imports:
+    - carputils
+
+about:
+  home: https://opencarp.org
+  license: Apache-2.0
+  license_family: Apache
+  license_file: LICENSE
+  summary: Python framework for OpenCARP Cardiac Electrophysiology Simulator 

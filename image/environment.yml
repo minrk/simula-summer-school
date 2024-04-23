@@ -20,8 +20,7 @@ dependencies:
 
   # packaged in this repo:
   - "minrk::opencarp=15"
-  # TODO:
-  # - carputils?
+  - "minrk::carputils"
 
   # basic Python
   - python=3.10
