@@ -19,7 +19,7 @@ dependencies:
   - brian2
 
   # packaged in this repo:
-  - "minrk::opencarp=12"
+  - "minrk::opencarp=15"
   # TODO:
   # - carputils?
 
@@ -48,7 +48,6 @@ dependencies:
   - jupyterhub-base=4.1.5
   - jupyterlab_code_formatter
   - jupyterlab-git
-  - nbclassic
   - nbdime
   - notebook
   - ipykernel
