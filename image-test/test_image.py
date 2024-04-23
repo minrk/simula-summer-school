@@ -1,8 +1,11 @@
 import os
+import sys
+from pathlib import Path
+from subprocess import run
 
 import pytest
 
-lectures_dir = "SSCP_2023_lectures"
+lectures_dir = "SSCP_2024_lectures"
 
 
 @pytest.fixture(scope="session")
@@ -60,8 +63,9 @@ def test_neuron():
 @pytest.mark.parametrize(
     "notebook",
     [
-        f"{lectures_dir}/L14 (FEniCS Mechanics)/L13_solved.ipynb",
-        f"{lectures_dir}/Stream 1 (Cardiac Mechanics)/L19-20/L20-solved.ipynb",
+        f"{lectures_dir}/L14 (FEniCS Mechanics)/L14_cardiac_mech.ipynb",
+        f"{lectures_dir}/Stream 1 (Cardiac Simulations)/mechanics/active_cube.ipynb",
+        f"{lectures_dir}/L16 (Machine Learning)/AI-LIF.ipynb",
     ],
 )
 def test_notebook(notebook, needs_puller):
@@ -72,3 +76,13 @@ def test_notebook(notebook, needs_puller):
         nb = nbformat.read(f, as_version=4)
     p = ExecutePreprocessor()
     p.preprocess(nb)
+
+
+@pytest.mark.parametrize(
+    "run_dir",
+    [
+        f"{lectures_dir}/Stream 1 (Cardiac Simulations)/01_EP_single_cell/01_basic_bench",
+    ],
+)
+def test_run(run_dir):
+    run([sys.executable, Path(run_dir) / "run.py"], check=True)
