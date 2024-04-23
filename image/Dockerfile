@@ -26,6 +26,8 @@ COPY conda-linux-64.lock /tmp/conda.lock
 COPY install-miniconda.bash /tmp/install-miniconda.bash
 RUN --mount=type=cache,target=/tmp/conda bash /tmp/install-miniconda.bash
 COPY condarc $CONDA_DIR/.condarc
+ENV CARPUTILS_SETTINGS $CONDA_DIR/etc/carputils-settings.yml
+RUN cusettings $CARPUTILS_SETTINGS
 
 USER $NB_UID
 
