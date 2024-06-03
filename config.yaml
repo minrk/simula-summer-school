@@ -54,6 +54,8 @@ jupyterhub:
     config:
       JupyterHub:
         authenticate_prometheus: false
+      OAuthenticator:
+        allow_all: true
 
   scheduling:
     userScheduler:
