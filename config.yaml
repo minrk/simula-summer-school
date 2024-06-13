@@ -68,8 +68,8 @@ jupyterhub:
     userPods:
       nodeAffinity:
         # TODO: 'require' when we deploy for real
-        matchNodePurpose: prefer
-        # matchNodePurpose: require
+        # matchNodePurpose: prefer
+        matchNodePurpose: require
     corePods:
       nodeAffinity:
         matchNodePurpose: require
