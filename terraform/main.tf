@@ -174,14 +174,14 @@ resource "kubernetes_namespace" "cert-manager" {
   metadata {
     name = "cert-manager"
   }
-  depends_on = [google_container_cluster.cluster]
+  depends_on = [google_container_cluster.cluster, google_container_node_pool.core]
 }
 
 resource "kubernetes_namespace" "hub" {
   metadata {
     name = "jupyterhub"
   }
-  depends_on = [google_container_cluster.cluster]
+  depends_on = [google_container_cluster.cluster, google_container_node_pool.core]
 }
 
 provider "helm" {
