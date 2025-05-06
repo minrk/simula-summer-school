@@ -1,0 +1,61 @@
+schema_version: 1
+
+context:
+  name: carputils
+  version: "18.0"
+  build: 0
+
+package:
+  name: ${{ name | lower }}
+  version: ${{ version }}
+
+source:
+  # carputils doesn't appear to make releases on its own repo
+  # get version from submodule in opencarp release, e.g.
+  # https://git.opencarp.org/openCARP/openCARP/-/tree/v18.0/external
+  git: https://git.opencarp.org/openCARP/carputils
+  rev: e66c3ca6c5016d12b651a4e58a54430af3b91a44
+
+build:
+  number: ${{ build }}
+  script: |
+    python -m pip install --no-binary :all: --no-deps -vv .
+  skip:
+    - match(python, "<3.11")
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+  host:
+    - python
+    - numpy 2.*
+    - pip
+    - setuptools
+  run:
+    - opencarp ${{ version }}.*
+    - python
+    # optional
+    # - pandas
+    # - scipy >=1.11
+    # - matplotlib-base
+    # - pytables
+
+  # more dependencies specified in https://git.opencarp.org/openCARP/carputils/-/blob/master/requirements.py3.txt
+  # but most if not all seem to be optional
+  # (and with lots of inappropriate pinning)
+
+tests:
+  - python:
+      imports:
+        - carputils
+      # don't pip check because they have
+      # all kinds of wrong pinning
+      pip_check: false
+
+about:
+  homepage: https://opencarp.org
+  repository: https://git.opencarp.org/openCARP/carputils
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Python framework for OpenCARP Cardiac Electrophysiology Simulator

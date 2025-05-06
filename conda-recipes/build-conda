@@ -1,8 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 # build conda but not with mounted volume as work dir
 # which is crazy slow on mac
 set -x
 
-rsync -aru /io/conda-bld/ /opt/conda/conda-bld/
-conda build "$@"
-rsync -aru /opt/conda/conda-bld/ /io/conda-bld/
+export CONDA_BLD_PATH=/tmp/conda-bld
+MNT_PATH=/io/conda-bld
+export HOME=/tmp/home
+
+rsync -aru ${MNT_PATH}/ ${CONDA_BLD_PATH}/
+for recipe in "$@" ; do
+    if [ -f "$recipe/recipe.yaml" ]; then
+        rattler-build build -r "$recipe" -m /opt/conda/conda_build_config.yaml -m /conda-recipes/conda_build_config.yaml
+    else
+        conda-build "$recipe"
+    fi
+done
+rsync -aru ${CONDA_BLD_PATH}/ ${MNT_PATH}/

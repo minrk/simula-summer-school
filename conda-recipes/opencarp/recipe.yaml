@@ -1,0 +1,54 @@
+schema_version: 1
+
+context:
+  name: opencarp
+  version: 18.0
+  build: 0
+
+package:
+  name: ${{ name | lower }}
+  version: ${{ version }}
+
+source:
+  # simulator/build_info.py only works from git
+  # git: https://git.opencarp.org/openCARP/openCARP.git
+  # tag: v${{ version }}
+  # sha256: 24247ad5ee0ba876ee09f4db28d316fc9282f24a7b7f23ab0936a01a9679fe6f
+  url: https://git.opencarp.org/openCARP/openCARP/-/archive/v${{ version }}/openCARP-v${{ version }}.tar.bz2
+  sha256: 30200911238991614d0ef288ce607e602533d785af05adbdd5aa1fd65a856f64
+  patches:
+    - cpp-env.patch
+
+build:
+  number: ${{ build }}
+
+requirements:
+  build:
+    - binutils
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - cmake
+    - make
+    - gengetopt
+    - pkg-config
+    - python 3.12.*
+  host:
+    - libblas
+    - liblapack
+    - mpich
+    - petsc
+    - zlib
+  run:
+    - python >=3.6
+  run_exports:
+    - ${{ pin_subpackage(name, exact=True) }}
+
+tests:
+  - script:
+      - bench
+
+about:
+  license_file: LICENSE.md
+  summary: Cardiac Electrophysiology Simulator
+  homepage: https://opencarp.org
+  repository: https://git.opencarp.org/openCARP/openCARP
