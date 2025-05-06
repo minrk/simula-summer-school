@@ -7,9 +7,12 @@ dependencies:
   - conda
 
   # scientific packages
-  - fenics=2019.1.0
-  - mshr=2019.1.0
-  - sympy
+  - fenics-dolfinx=0.9.0
+  # need 2019.2.0.dev to use ufl_legacy
+  # to avoid conflict with dolfinx
+  - conda-forge/label/fenics-dev::fenics=2019.2.0.dev20240219
+  # - mshr=2019.1.0
+  - sympy<1.14
   - neuron
   # lfpy/pytorch seem to have conflicts
   # - lfpy=2.2.5
@@ -19,14 +22,15 @@ dependencies:
   - brian2
 
   # packaged in this repo:
-  - "minrk::opencarp=15"
-  - "minrk::carputils"
+  - "minrk::opencarp=18"
+  - "minrk::carputils=18"
 
   # basic Python
-  - python=3.10
+  - python=3.12
   - pip
   - black
   - isort
+  - ruff
   - matplotlib-base
   - cython
   - scipy
@@ -41,10 +45,9 @@ dependencies:
   - wurlitzer
 
   # IPython/Jupyter
-  # - nodejs=14
   - jupyterlab=4.*
   - jupyter-resource-usage
-  - jupyterhub-base=4.1.5
+  - jupyterhub-base=5.3.0
   - jupyterlab_code_formatter
   - jupyterlab-git
   - nbdime

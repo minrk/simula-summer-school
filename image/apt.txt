@@ -3,7 +3,6 @@ binutils
 bzip2
 ca-certificates
 emacs
-git
 less
 libgl1
 locales

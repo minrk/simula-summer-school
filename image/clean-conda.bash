@@ -3,18 +3,10 @@
 # This downloads and installs a pinned version of miniconda
 set -ex
 
-export MAMBA_ROOT_PREFIX=/tmp/conda
-export MAMBA_ALWAYS_YES=true
+env | sort
 
-wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/1.5.8 | tar --directory /tmp -xvj bin/micromamba
+export CONDA_DIR=$CONDA_PREFIX
 
-echo "installing root env:"
-time /tmp/bin/micromamba create -p "${CONDA_DIR}" -f /tmp/conda.lock
-
-# clear out temporary files
-rm -rf /tmp/bin
-
-source "$CONDA_DIR"/etc/profile.d/conda.sh
 conda list
 
 # Clean things out!
@@ -71,4 +63,4 @@ done
 echo "Usage after:"
 du -hs "$CONDA_DIR"
 
-chown -R "$NB_USER" "${CONDA_DIR}"
+chown -R "$NB_UID" "${CONDA_DIR}"

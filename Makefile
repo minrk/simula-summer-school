@@ -11,8 +11,8 @@ BUILDER_NAME=sss-builder
 image: $(wildcard image/*)
 	docker buildx build --platform linux/amd64 --load -t $(IMAGE) image
 
-image/conda-linux-64.lock: image/environment.yml image/virtual-packages.yaml
-	conda-lock lock -k explicit --mamba --channel conda-forge --channel minrk --platform linux-64 --virtual-package-spec image/virtual-packages.yaml --filename-template $@ -f $<
+image/pixi.lock: image/pixi.toml
+	cd image; pixi update --no-install
 
 image-test:
 	docker buildx build --load -t image-test --build-arg IMAGE=$(IMAGE) image-test

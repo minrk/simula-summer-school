@@ -1,2 +1,2 @@
 # https://github.com/multiphenics/multiphenics/archive/v0.2.0.tar.gz
-https://github.com/multiphenics/multiphenics/archive/c0099da4e256f748c575eedc38a7b710e794c8b3.tar.gz
+https://github.com/multiphenics/multiphenics/archive/v0.3.0.tar.gz
