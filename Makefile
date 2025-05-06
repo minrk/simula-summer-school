@@ -1,5 +1,5 @@
 KUBE_CTX=sss
-GKE_PROJECT=simula-summer-school-2024
+GKE_PROJECT=sscp-2025
 GKE_REGION=europe-west1
 GKE_ZONE=$(GKE_REGION)-b
 IMAGE=$(GKE_REGION)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2024
@@ -33,6 +33,7 @@ push:
 # https://gitlab.com/gitlab-org/ci-cd/docker-machine/-/issues/47
 # Error 404: The resource 'projects/simula-summer-school-2023/global/firewalls/docker-machines' was not found, notFound
 
+# builder-firewall-rule before builder-new
 builder-firewall-rule:
 	gcloud --project=$(GKE_PROJECT) compute firewall-rules create docker-machines --allow=tcp:22
 
@@ -45,8 +46,13 @@ builder-new:
 		--boot-disk-size=100 \
 		--boot-disk-type=pd-balanced \
 		--image-project=ubuntu-os-cloud \
-		--image-family=ubuntu-minimal-2204-lts
+		--image-family=ubuntu-minimal-2404-lts-amd64
 	gcloud compute config-ssh --project=$(GKE_PROJECT)
+	# seems to need to wait to boot
+	sleep 10
+	$(MAKE) builder-setup-docker
+
+builder-setup-docker:
 	# setup docker
 	gcloud compute ssh --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME) -- "curl https://get.docker.com | bash; sudo usermod -aG docker $$(whoami)"
 	# setup rsync
@@ -62,7 +68,7 @@ builder-env:
 	@echo "export DOCKER_HOST=ssh://$(BUILDER_NAME).$(GKE_ZONE).$(GKE_PROJECT)"
 
 builder-rm:
-	docker-machine rm $(BUILDER_NAME)
+	gcloud compute instances delete --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME)
 
 terraform:
 	cd terraform; terraform init -upgrade; terraform apply
@@ -92,10 +98,10 @@ conda-fetch:
 	rsync -av --delete -e 'gcloud compute ssh --project $(GKE_PROJECT) $(BUILDER_NAME) --' :$(PWD)/conda-bld/linux-64/ $(PWD)/conda-bld/linux-64/
 
 conda/%: conda conda-rsync
-	docker run --rm -it -e CPU_COUNT=4 -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*
+	docker run --rm -it -e CPU_COUNT=4 -u 1001 -v $(PWD)/conda-bld:/io/conda-bld -v $(PWD)/conda-recipes:/conda-recipes -v /tmp/conda-pkgs:/opt/conda/pkgs conda-pkgs build-conda /conda-recipes/$*
 
 conda-upload/%:
-	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld conda-pkgs sh -c 'anaconda upload /io/conda-bld/linux-64/$*-*.tar.bz2'
+	docker run --rm -it -v $(PWD)/conda-bld:/io/conda-bld conda-pkgs sh -c 'anaconda upload /io/conda-bld/linux-64/$*-*.conda'
 
 run:
 	docker run -it --rm -p9999:8888 $(IMAGE) $(ARG)
