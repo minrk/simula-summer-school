@@ -2,14 +2,21 @@ KUBE_CTX=sss
 GKE_PROJECT=sscp-2025
 GKE_REGION=europe-west1
 GKE_ZONE=$(GKE_REGION)-b
-IMAGE=$(GKE_REGION)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2024
+IMAGE=$(GKE_REGION)-docker.pkg.dev/$(GKE_PROJECT)/sss/simula-summer-school:2025
 NS=jupyterhub
 BUILDER_NAME=sss-builder
 
-.PHONY: image image-test push conda-rsync conda-fetch terraform kube-creds builder-new-new
+ifeq ($(PUSH), 1)
+  IMAGE_PUSH=--push
+endif
+
+.PHONY: image image-test push conda-rsync conda-fetch tofu kube-creds builder-new
+
+image-push:
+	make image PUSH=1
 
 image: $(wildcard image/*)
-	docker buildx build --platform linux/amd64 --load -t $(IMAGE) image
+	docker buildx build --platform linux/amd64 $(IMAGE_PUSH) --load -t $(IMAGE) image
 
 image/pixi.lock: image/pixi.toml
 	cd image; pixi update --no-install
@@ -49,7 +56,7 @@ builder-new:
 		--image-family=ubuntu-minimal-2404-lts-amd64
 	gcloud compute config-ssh --project=$(GKE_PROJECT)
 	# seems to need to wait to boot
-	sleep 10
+	sleep 20
 	$(MAKE) builder-setup-docker
 
 builder-setup-docker:
@@ -70,13 +77,12 @@ builder-env:
 builder-rm:
 	gcloud compute instances delete --project=$(GKE_PROJECT) --zone=$(GKE_ZONE) $(BUILDER_NAME)
 
-terraform:
-	cd terraform; terraform init -upgrade; terraform apply
+tofu:
+	cd tofu; tofu init -upgrade; tofu apply
 
 kube-creds:
 	gcloud --project=$(GKE_PROJECT) container clusters get-credentials --region $(GKE_REGION) $(KUBE_CTX)
 	kubectx $(KUBE_CTX)=.
-	@kubectl create namespace jupyterhub
 	kubens jupyterhub
 
 HELM_ARGS := hub --namespace=$(NS) --kube-context=$(KUBE_CTX) ./jupyterhub -f config.yaml -f secrets.yaml

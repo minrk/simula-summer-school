@@ -3,30 +3,36 @@ coreNodeSelector: &coreNodeSelector
 
 jupyterhub:
   proxy:
-    chp:
-      nodeSelector: *coreNodeSelector
+    # chp:
+    # incompatible with autopilot
+    #   nodeSelector: *coreNodeSelector
     service:
       type: ClusterIP
   ingress:
     enabled: true
     annotations:
       ingress.kubernetes.io/proxy-body-size: 64m
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/ingress.class: gce
+      networking.gke.io/managed-certificates: hub
+      # kubernetes.io/tls-acme: "true"
     hosts:
       - sscp.minrk.net
-    tls:
-      - secretName: tls-jupyterhub
-        hosts:
-          - sscp.minrk.net
+    # using gce for tls
+    # tls:
+    #   - hosts:
+    #       - sscp.minrk.net
+    # secretName: tls-jupyterhub
 
   singleuser:
     events: true
+    cloudMetadata:
+      # incompatible with autopilot
+      blockWithIptables: false
     storage:
       homeMountPath: /home/user
     image:
-      name: europe-west1-docker.pkg.dev/simula-summer-school-2024/sss/simula-summer-school
-      tag: "2024"
+      name: europe-west1-docker.pkg.dev/sscp-2025/sss/simula-summer-school
+      tag: "2025"
       pullPolicy: Always
     memory:
       limit: 2G
@@ -34,11 +40,14 @@ jupyterhub:
     cpu:
       limit: 1
       guarantee: 0.5
+    uid: 1001 # match
     extraEnv:
       CULL_CONNECTED: "1"
       CULL_TIMEOUT: "1800"
       CULL_KERNEL_TIMEOUT: "1800"
       CULL_INTERVAL: "120"
+      # dijitso defaults to in-env without checking for write permissions
+      DIJITSO_CACHE_DIR: "/tmp/dijitso-cache"
 
   prePuller:
     hook:
@@ -47,7 +56,8 @@ jupyterhub:
       enabled: true
 
   hub:
-    nodeSelector: *coreNodeSelector
+    # incompatible with autopilot
+    # nodeSelector: *coreNodeSelector
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/path: /hub/metrics
@@ -56,27 +66,31 @@ jupyterhub:
         authenticate_prometheus: false
       OAuthenticator:
         allow_all: true
+      Spawner:
+        http_timeout: 60
 
   scheduling:
-    userScheduler:
-      enabled: true
     podPriority:
       enabled: true
     userPlaceholder:
       enabled: true
       replicas: 0
-    userPods:
-      nodeAffinity:
-        # TODO: 'require' when we deploy for real
-        # 'prefer' for lower costs
-        # matchNodePurpose: require
-        matchNodePurpose: prefer
-    corePods:
-      nodeAffinity:
-        matchNodePurpose: require
+    # userScheduler, affinity incompatible with autopilot
+    userScheduler:
+      enabled: false
+    # userPods:
+    #   nodeAffinity:
+    #     # TODO: 'require' when we deploy for real
+    #     # 'prefer' for lower costs
+    #     # matchNodePurpose: require
+    #     matchNodePurpose: prefer
+    # corePods:
+    #   nodeAffinity:
+    #     matchNodePurpose: require
 
 grafana:
-  nodeSelector: *coreNodeSelector
+  # incompatible with autopilot
+  # nodeSelector: *coreNodeSelector
   grafana.ini:
     auth.anonymous:
       enabled: true
@@ -87,14 +101,16 @@ grafana:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: gce
+      networking.gke.io/managed-certificates: hub
       kubernetes.io/tls-acme: "true"
     hosts:
       - grafana.sscp.minrk.net
-    tls:
-      - hosts:
-          - grafana.sscp.minrk.net
-        secretName: tls-grafana
+    # cert autopilot
+    # tls:
+    #   - hosts:
+    #       - grafana.sscp.minrk.net
+    # secretName: tls-grafana
   persistence:
     size: 2Gi
     enabled: true
@@ -112,10 +128,12 @@ grafana:
           editable: false
 
 prometheus:
-  nodeSelector: *coreNodeSelector
-  nodeExporter:
-    updateStrategy:
-      type: RollingUpdate
+  # nodeSelector: *coreNodeSelector
+  # disable a bunch of things for autopilot
+  prometheus-node-exporter:
+    enabled: false
+  #     updateStrategy:
+  #       type: RollingUpdate
   alertmanager:
     enabled: false
   pushgateway:
@@ -123,20 +141,21 @@ prometheus:
   rbac:
     create: true
   server:
-    nodeSelector: *coreNodeSelector
+    # nodeSelector: *coreNodeSelector
     podLabels:
       hub.jupyter.org/network-access-hub: "true"
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/ingress.class: gce
+        networking.gke.io/managed-certificates: hub
+        # kubernetes.io/tls-acme: "true"
       hosts:
         - prometheus.sscp.minrk.net
-      tls:
-        - hosts:
-            - prometheus.sscp.minrk.net
-          secretName: tls-prometheus
+      # tls:
+      #   - hosts:
+      #       - prometheus.sscp.minrk.net
+      # secretName: tls-prometheus
   kube-state-metrics:
     metricLabelsAllowlist:
       - pods=[app,component]
@@ -150,7 +169,7 @@ ingress-nginx:
       annotations:
         prometheus.io/scrape: "true"
   controller:
-    nodeSelector: *coreNodeSelector
+    # nodeSelector: *coreNodeSelector
     replicaCount: 2
     scope:
       enabled: true
