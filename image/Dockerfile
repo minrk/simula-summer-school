@@ -1,22 +1,25 @@
-FROM ghcr.io/prefix-dev/pixi:0.40.0 AS build
+FROM ghcr.io/prefix-dev/pixi:0.46.0 AS build
 
 # copy source code, pixi.toml and pixi.lock to the container
 RUN mkdir /opt/pixi
 COPY pixi.* /opt/pixi/
 WORKDIR /opt/pixi
 
-ENV XDG_CACHE_DIR=/tmp/cache
-RUN --mount=type=cache,target=$XDG_CACHE_DIR pixi install
+ENV NB_UID=1001
+RUN chown -R $NB_UID /opt/pixi
+USER $NB_UID
+
+ENV XDG_CACHE_HOME=/tmp/cache
+
+RUN --mount=type=cache,uid=$NB_UID,target=$XDG_CACHE_HOME pixi install
 # install some extra things with requirements.txt
 COPY requirements.txt /tmp/requirements.txt
-RUN  --mount=type=cache,target=$XDG_CACHE_DIR pixi run pip install -r /tmp/requirements.txt
+RUN  --mount=type=cache,uid=$NB_UID,target=$XDG_CACHE_HOME pixi run pip install -r /tmp/requirements.txt
 
 COPY clean-conda.bash /tmp/clean-conda.bash
-ENV NB_UID=1001
-
-RUN pixi run cusettings $CONDA_DIR/etc/carputils-settings.yml
 RUN pixi run bash /tmp/clean-conda.bash
 
+USER root
 # Create the shell-hook bash script to activate the environment
 RUN pixi shell-hook > /shell-hook.sh \
  && echo 'exec "$@"' >> /shell-hook.sh
@@ -52,8 +55,9 @@ COPY condarc $CONDA_DIR/.condarc
 
 USER $NB_UID
 
-# enable nbdime globally
+# enable nbdime globally, configure carputils
 USER root
+RUN cusettings $CONDA_DIR/etc/carputils-settings.yml
 RUN nbdime config-git --enable --system
 USER $NB_UID
 

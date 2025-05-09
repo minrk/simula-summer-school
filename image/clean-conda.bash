@@ -1,6 +1,5 @@
 #!/bin/bash
-# Set up
-# This downloads and installs a pinned version of miniconda
+# this image is big, make it a bit less big by stripping some unnecessary large files
 set -ex
 
 env | sort
@@ -48,11 +47,11 @@ rm -vf "${CONDA_DIR}"/lib/libmkl_vml_avx.*
 rm -vf "${CONDA_DIR}"/lib/libmkl_vml_avx512*
 
 # strip dylibs
-find "${CONDA_DIR}"/lib -size +1000k -name '*.so' -type f -exec strip -s {} \;
-find "${CONDA_DIR}"/lib -size +1000k -name '*.so.*' -type f -exec strip -s {} \;
+find "${CONDA_DIR}"/lib -size +1000k -name '*.so' -print -type f -exec strip -s {} \;
+find "${CONDA_DIR}"/lib -size +1000k -name '*.so.*' -print -type f -exec strip -s {} \;
 
 # strip exes
-find "${CONDA_DIR}"/bin -size +1000k -exec strip -s {} \;
+find "${CONDA_DIR}"/bin -size +2000k -print -exec strip -s {} \;
 
 
 # discard sourcemaps
@@ -62,5 +61,3 @@ done
 
 echo "Usage after:"
 du -hs "$CONDA_DIR"
-
-chown -R "$NB_UID" "${CONDA_DIR}"

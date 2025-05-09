@@ -5,7 +5,7 @@ from subprocess import run
 
 import pytest
 
-lectures_dir = "SSCP_2024_lectures"
+lectures_dir = "SSCP_lectures"
 
 
 @pytest.fixture(scope="session")
@@ -52,6 +52,55 @@ def test_dolfin():
     W = FunctionSpace(mesh, elem)
 
 
+def test_dolfinx():
+    # poisson tutorial
+    # https://jsdokken.com/dolfinx-tutorial/chapter1/fundamentals_code.html
+    from dolfinx import mesh
+    from mpi4py import MPI
+
+    domain = mesh.create_unit_square(MPI.COMM_WORLD, 8, 8, mesh.CellType.quadrilateral)
+
+    from dolfinx.fem import functionspace
+
+    V = functionspace(domain, ("Lagrange", 1))
+
+    from dolfinx import fem
+
+    uD = fem.Function(V)
+    uD.interpolate(lambda x: 1 + x[0] ** 2 + 2 * x[1] ** 2)
+
+    import numpy
+
+    # Create facet to cell connectivity required to determine boundary facets
+    tdim = domain.topology.dim
+    fdim = tdim - 1
+    domain.topology.create_connectivity(fdim, tdim)
+    boundary_facets = mesh.exterior_facet_indices(domain.topology)
+
+    boundary_dofs = fem.locate_dofs_topological(V, fdim, boundary_facets)
+    bc = fem.dirichletbc(uD, boundary_dofs)
+
+    import ufl
+
+    u = ufl.TrialFunction(V)
+    v = ufl.TestFunction(V)
+
+    from dolfinx import default_scalar_type
+
+    f = fem.Constant(domain, default_scalar_type(-6))
+
+    a = ufl.dot(ufl.grad(u), ufl.grad(v)) * ufl.dx
+    L = f * v * ufl.dx
+
+    from dolfinx.fem.petsc import LinearProblem
+
+    problem = LinearProblem(
+        a, L, bcs=[bc], petsc_options={"ksp_type": "preonly", "pc_type": "lu"}
+    )
+    uh = problem.solve()
+
+
+@pytest.mark.skip(reason="mshr not available")
 def test_mshr():
     import mshr  # noqa
 
@@ -63,9 +112,11 @@ def test_neuron():
 @pytest.mark.parametrize(
     "notebook",
     [
-        f"{lectures_dir}/L14 (FEniCS Mechanics)/L14_cardiac_mech.ipynb",
-        f"{lectures_dir}/Stream 1 (Cardiac Simulations)/mechanics/active_cube.ipynb",
-        f"{lectures_dir}/L16 (Machine Learning)/AI-LIF.ipynb",
+        f"{lectures_dir}/L14 (FEniCS Mechanics)/L14_active_cube.ipynb",
+        f"{lectures_dir}/L15 (EMI)/EMI.ipynb",
+        # AI-LIF notebook is no longer complete (has fill-in exercises)
+        # FIXME: there are no runnable pytorch notebooks
+        # f"{lectures_dir}/L16 (Machine Learning)/AI-LIF.ipynb",
     ],
 )
 def test_notebook(notebook, needs_puller):
