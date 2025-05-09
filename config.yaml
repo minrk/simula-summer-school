@@ -36,11 +36,11 @@ jupyterhub:
       pullPolicy: Always
     memory:
       limit: 2G
-      guarantee: 1G
+      guarantee: 2G
     cpu:
       limit: 1
       guarantee: 0.5
-    uid: 1001 # match
+    uid: 1001 # match image
     extraEnv:
       CULL_CONNECTED: "1"
       CULL_TIMEOUT: "1800"
