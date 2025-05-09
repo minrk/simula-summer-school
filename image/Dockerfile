@@ -44,6 +44,7 @@ ENV NB_UID=1001 \
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
 
 COPY --from=build /opt/pixi /opt/pixi
+COPY --from=build /shell-hook.sh /shell-hook.sh
 # RUN ls -la /opt/pixi/ && exit 1
 # setup conda env
 ENV PATH=$CONDA_DIR/bin:$PATH
@@ -59,7 +60,7 @@ USER $NB_UID
 # fenics 3d plotting doesn't like mpl 3
 # RUN pip install --no-cache 'matplotlib<3'
 
-COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.10/site-packages/pull_server_ext.py
+COPY pull_server_ext.py ${CONDA_DIR}/lib/python3.12/site-packages/pull_server_ext.py
 COPY pull-button.js /tmp/
 RUN jupyter server extension enable --sys-prefix pull_server_ext
 
@@ -73,12 +74,11 @@ USER root
 # setup entrypoint
 RUN ln -s $CONDA_DIR/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 USER $NB_UID
-ENTRYPOINT ["/shell-hook.sh"]
+ENTRYPOINT ["/bin/bash", "/shell-hook.sh"]
 CMD ["jupyter", "lab", "--ip=0.0.0.0"]
 
-
 # late, small changes, to avoid large image rebuilds
-# move to environment.yml on next large update
+# move to pixi.toml on next large update
 
 # jupyter-server-mathjax 0.2.2 unconditionally sets the wrong mathjax_url
 # RUN pip install --no-cache jupyter-server-mathjax==0.2.0
