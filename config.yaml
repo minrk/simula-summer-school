@@ -158,7 +158,7 @@ prometheus:
       # secretName: tls-prometheus
   kube-state-metrics:
     metricLabelsAllowlist:
-      - pods=[app,component]
+      - pods=[app,component,hub.jupyter.org/username]
       - nodes=[*]
 
 ingress-nginx:
