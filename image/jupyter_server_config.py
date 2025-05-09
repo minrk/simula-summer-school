@@ -20,3 +20,21 @@ if os.getenv("CULL_CONNECTED") not in {"", "0"}:
     c.MappingKernelManager.cull_connected = True
 
 c.ContentsManager.hide_globs.extend(["lost+found"])
+
+
+# set windowing-mode: none because default windowing mode is super broken
+import json
+from pathlib import Path
+
+tracker_settings = (
+    Path.home()
+    / ".jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings"
+)
+
+settings = {"windowingMode": "none"}
+if not tracker_settings.exists():
+    print(f"Writing windowing mode to {tracker_settings}")
+    tracker_settings.parent.mkdir(parents=True, exist_ok=True)
+
+    with tracker_settings.open("w") as f:
+        json.dump({"windowingMode": "none"}, f)
