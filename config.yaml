@@ -8,6 +8,8 @@ jupyterhub:
     #   nodeSelector: *coreNodeSelector
     service:
       type: ClusterIP
+      annotations:
+        cloud.google.com/backend-config: '{"default": "allow-websockets"}'
   ingress:
     enabled: true
     annotations:
@@ -74,7 +76,7 @@ jupyterhub:
       enabled: true
     userPlaceholder:
       enabled: true
-      replicas: 0
+      replicas: 10
     # userScheduler, affinity incompatible with autopilot
     userScheduler:
       enabled: false
