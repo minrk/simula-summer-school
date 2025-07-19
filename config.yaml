@@ -67,7 +67,8 @@ jupyterhub:
       JupyterHub:
         authenticate_prometheus: false
       OAuthenticator:
-        allow_all: true
+        allow_all: false
+        allow_existing_users: true
       Spawner:
         http_timeout: 60
 
